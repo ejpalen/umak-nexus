@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">UMak Nexus</string>
+    <string name="onboarding_header">THE ULTIMATE CAMPUS SHOPPING EXPERIENCE</string>
+    <string name="onboarding_description">Your one-stop destination for seamless and smart campus shopping, bringing convenience and quality to your fingertips.</string>
+    <string name="onboarding_signIn_header">SIGN IN WITH YOUR UMAK ACCOUNT</string>
+    <string name="onboarding_signIn_description">Personalize your shopping experience with UMAK NEXUS by connecting to your Umak Account.</string>
+</resources>
+
