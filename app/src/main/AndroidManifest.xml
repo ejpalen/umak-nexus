@@ -13,6 +13,9 @@
         android:theme="@style/Theme.UMakNexus"
         tools:targetApi="34">
         <activity
+            android:name=".Shop_Products"
+            android:exported="false" />
+        <activity
             android:name=".Home"
             android:exported="false" />
         <activity
