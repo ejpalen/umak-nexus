@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/backButton"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_insetEdge="none"
+    tools:context=".FeedbackSupport">
+
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="50dp"
+        android:layout_height="42dp"
+        app:srcCompat="@android:drawable/btn_star_big_on"
+        tools:layout_editor_absoluteX="226dp"
+        tools:layout_editor_absoluteY="284dp" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="50dp"
+        android:layout_height="42dp"
+        app:srcCompat="@android:drawable/btn_star_big_on"
+        tools:layout_editor_absoluteX="176dp"
+        tools:layout_editor_absoluteY="284dp" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="50dp"
+        android:layout_height="42dp"
+        app:srcCompat="@android:drawable/btn_star_big_on"
+        tools:layout_editor_absoluteX="126dp"
+        tools:layout_editor_absoluteY="284dp" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:addStatesFromChildren="false"
+        android:background="#f2f2f2"
+        android:elevation="2dp"
+        android:padding="5dp"
+        app:itemIconSize="25dp"
+        app:itemIconTint="@drawable/item_selector"
+        app:itemRippleColor="@android:color/transparent"
+        app:labelVisibilityMode="unlabeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_profile" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:backgroundTint="@android:color/transparent"
+        android:fontFamily="@font/syne"
+        android:text="< Profile"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="30dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="374dp"
+        android:layout_height="40dp"
+        android:fontFamily="@font/syne_bold"
+        android:text="Feedback and Support"
+        android:textAlignment="center"
+        android:textColor="#0057FF"
+        android:textSize="28sp"
+        tools:layout_editor_absoluteX="21dp"
+        tools:layout_editor_absoluteY="96dp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="364dp"
+        android:layout_height="39dp"
+        android:fontFamily="@font/syne_bold"
+        android:text=" Send us your feedback!"
+        android:textAlignment="inherit"
+        android:textColor="#0B0909"
+        android:textSize="22sp"
+        tools:layout_editor_absoluteX="26dp"
+        tools:layout_editor_absoluteY="144dp" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="364dp"
+        android:layout_height="39dp"
+        android:fontFamily="@font/syne_bold"
+        android:text=" How was your experience?"
+        android:textAlignment="inherit"
+        android:textColor="#0B0909"
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="23dp"
+        tools:layout_editor_absoluteY="245dp" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="361dp"
+        android:layout_height="43dp"
+        android:fontFamily="@font/syne"
+        android:text="Do you have a suggestion or found some bug? Let us know    in the field below. "
+        android:textAlignment="inherit"
+        android:textColor="#070707"
+        tools:layout_editor_absoluteX="29dp"
+        tools:layout_editor_absoluteY="183dp" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
+        android:layout_width="357dp"
+        android:layout_height="169dp"
+        android:background="#ECF6FE"
+        tools:layout_editor_absoluteX="29dp"
+        tools:layout_editor_absoluteY="378dp">
+
+        <EditText
+            android:id="@+id/editTextText2"
+            android:layout_width="345dp"
+            android:layout_height="157dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/syne"
+            android:gravity="start"
+            android:inputType="text"
+            android:outlineProvider="paddedBounds"
+            android:singleLine="false"
+            android:text="Describe your experience here."
+            android:textAlignment="viewStart"
+            android:textSize="16sp"
+            app:guidelineUseRtl="false"
+            tools:layout_editor_absoluteX="6dp"
+            tools:layout_editor_absoluteY="6dp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="355dp"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="1dp"
+            tools:layout_editor_absoluteY="103dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/getStarted_btn2"
+        android:layout_width="343dp"
+        android:layout_height="53dp"
+        android:background="@drawable/white_bg_round_corners"
+        android:backgroundTint="#0057FF"
+        android:fontFamily="@font/syne_bold"
+        android:text="SEND FEEDBACK"
+        android:textColor="@color/white"
+        tools:layout_editor_absoluteX="35dp"
+        tools:layout_editor_absoluteY="566dp" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="50dp"
+        android:layout_height="42dp"
+        app:srcCompat="@android:drawable/btn_star_big_on"
+        tools:layout_editor_absoluteX="26dp"
+        tools:layout_editor_absoluteY="284dp" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="50dp"
+        android:layout_height="42dp"
+        app:srcCompat="@android:drawable/btn_star_big_on"
+        tools:layout_editor_absoluteX="76dp"
+        tools:layout_editor_absoluteY="284dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

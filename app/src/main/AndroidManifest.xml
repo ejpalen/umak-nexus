@@ -12,6 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UMakNexus"
         tools:targetApi="34">
+        <meta-data
+            android:name="com.google.android.actions"
+            android:resource="@xml/bottom_profile" />
+
+        <activity
+            android:name=".FeedbackSupport"
+            android:exported="false" />
         <activity
             android:name=".Home"
             android:exported="false" />
