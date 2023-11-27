@@ -1,11 +1,16 @@
 package com.example.umaknexus;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Home extends AppCompatActivity {
 
@@ -39,5 +44,18 @@ public class Home extends AppCompatActivity {
 //            }
 //            return false;
 //        });
+
+        RecyclerView category_RecyclerView = findViewById(R.id.categoryRecyclerView);
+
+        List<Categories>  categoryItems= new ArrayList<Categories>();
+        categoryItems.add(new Categories("All", R.drawable.all_icon));
+        categoryItems.add(new Categories("Lace", R.drawable.lace_icon));
+        categoryItems.add(new Categories("Books", R.drawable.books_icon));
+        categoryItems.add(new Categories("Uniform", R.drawable.uniform_icon));
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        category_RecyclerView.setLayoutManager(layoutManager);
+        category_RecyclerView.setAdapter(new CategoryAdapter(getApplicationContext(), categoryItems));
+
     }
 }
