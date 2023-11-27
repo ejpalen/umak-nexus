@@ -8,6 +8,7 @@ public class Onboarding_Signin extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        startActivity(new Intent(getApplicationContext(), Home.class));
+        setContentView(R.layout.activity_onboarding_signin);
+        //startActivity(new Intent(getApplicationContext(), Home.class));
     }
 }
