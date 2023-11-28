@@ -22,12 +22,12 @@ public class MainActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), Home.class));
 
         Button getStartedBtn = findViewById(R.id.getStarted_btn);
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation1);
+    //    BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
 
         getStartedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), FeedbackSupport.class));
+                startActivity(new Intent(getApplicationContext(), Shop_Products.class));
             }
         });
 
