@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <LinearLayout
+        android:id="@+id/addtocart_LinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <FrameLayout
+            android:id="@+id/cart_LinearLayout"
+            android:layout_width="350dp"
+            android:layout_height="105sp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/cart_bg"
+            android:padding="20dp">
+
+
+            <ImageView
+                android:id="@+id/img_product"
+                android:layout_width="67sp"
+                android:layout_height="67dp"
+                android:background="@drawable/sample_image" />
+
+            <TextView
+                android:id="@+id/prodName"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="80dp"
+                android:layout_marginTop="13dp"
+                android:layout_toEndOf="@+id/img_product"
+                android:fontFamily="@font/syne"
+                android:textColor="@color/black"
+                tools:text="Uniform L" />
+
+            <TextView
+                android:id="@+id/prodPrice"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/prodName"
+                android:layout_marginStart="80dp"
+                android:layout_marginTop="30dp"
+                android:layout_toEndOf="@+id/img_product"
+                android:fontFamily="@font/syne"
+                android:textColor="@color/black"
+                tools:text="₱300.00" />
+
+
+            <LinearLayout
+                android:id="@+id/qty_LinearLayout"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="200dp"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical">
+
+                <Button
+                    android:id="@+id/btn_subtract"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/bg_btn_add"
+                    android:fontFamily="@font/syne"
+                    android:text="-"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/qty_item"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/bg_btn_item"
+                    android:fontFamily="@font/syne"
+                    android:textAlignment="center"
+                    android:layout_gravity="center_horizontal"
+                    android:text="1"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/btn_add"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/bg_btn_add"
+                    android:fontFamily="@font/syne"
+                    android:text="+"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/delete_btn"
+            android:layout_width="22sp"
+            android:layout_height="27sp"
+            android:background="@drawable/delete_btn"
+            android:layout_marginLeft="13dp"/>
+
+
+    </LinearLayout>
+
+</RelativeLayout>
