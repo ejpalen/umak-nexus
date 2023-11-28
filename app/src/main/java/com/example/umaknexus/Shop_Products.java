@@ -43,8 +43,6 @@ public class Shop_Products extends AppCompatActivity {
         productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
         productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
 
-
-
         shopProductLayoutManager = new GridLayoutManager(this, 2);
         shopProductrecyclerView.setLayoutManager(shopProductLayoutManager);
         shopProductrecyclerView.setAdapter(new shopProductsAdapter(getApplication(), productsItems));

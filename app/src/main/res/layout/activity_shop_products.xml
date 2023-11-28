@@ -10,7 +10,7 @@
         android:layout_width="371dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,20 +24,38 @@
             android:layout_marginBottom="20dp"
             android:fontFamily="@font/syne_bold"
             android:text="Shop Products"
+            android:textColor="@color/main_color"
             android:textSize="32sp" />
 
-        <EditText
-            android:id="@+id/btn_edit"
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/bg_search"
-            android:drawableStart="@drawable/icon_search"
-            android:fontFamily="@font/syne"
-            android:hint="Search Product"
-            android:paddingLeft="20dp"
-            android:textAllCaps="false"
-            android:textSize="10sp" />
+            android:background="@drawable/search_white_bg"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp">
+
+            <!-- ImageView for the search icon -->
+            <ImageView
+                android:id="@+id/searchIcon"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                app:srcCompat="@drawable/search_icon" />
+
+            <!-- EditText for search input -->
+            <EditText
+                android:id="@+id/searchEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/searchIcon"
+                android:background="@color/secondary_color"
+                android:fontFamily="@font/syne"
+                android:hint="Search" />
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -48,7 +66,6 @@
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
                 android:fontFamily="@font/syne_bold"
                 android:text="Categories"
                 android:textColor="@color/black"
@@ -58,6 +75,7 @@
                 android:id="@+id/categoryRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
                 android:orientation="horizontal" />
 
         </LinearLayout>
@@ -66,7 +84,8 @@
             android:id="@+id/shopProductRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" />
+            android:orientation="horizontal"
+            android:layout_marginBottom="110dp"/>
 
     </LinearLayout>
 
