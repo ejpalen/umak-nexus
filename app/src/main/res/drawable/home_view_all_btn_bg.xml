@@ -1,0 +1,13 @@
+<!-- button_background.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Image background with centerCrop scale type and rounded corners -->
+    <item android:drawable="@drawable/home_viewall_btn_bg">
+        <shape android:shape="rectangle">
+            <corners android:radius="40dp" />
+        </shape>
+    </item>
+
+    <!-- Background color -->
+    <item android:drawable="@color/main_color" />
+</layer-list>

@@ -1,6 +1,7 @@
 package com.example.umaknexus;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -56,5 +57,28 @@ public class Home extends AppCompatActivity {
         category_RecyclerView.setLayoutManager(layoutManager);
         category_RecyclerView.setAdapter(new CategoryAdapter(getApplicationContext(), categoryItems));
 
+        List<Products> productsItems=new ArrayList<Products>();
+        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
+        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
+        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
+        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
+        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
+        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
+        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
+        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
+
+
+        RecyclerView newArrivals_RecyclerView = findViewById(R.id.NewArrivalsRecyclerView);
+
+        LinearLayoutManager NewArrivalslayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        newArrivals_RecyclerView.setLayoutManager(NewArrivalslayoutManager);
+        newArrivals_RecyclerView.setAdapter(new NewArrivals_Products_Adapter(getApplication(), productsItems));
+
+
+        RecyclerView bestSellers_RecyclerView = findViewById(R.id.BestSellersRecyclerView);
+
+        LinearLayoutManager bestSellers_NewlayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        bestSellers_RecyclerView.setLayoutManager(bestSellers_NewlayoutManager);
+        bestSellers_RecyclerView.setAdapter(new NewArrivals_Products_Adapter(getApplication(), productsItems));
     }
 }

@@ -6,4 +6,5 @@
     <color name="secondary_color">#ECF6FE</color>
     <color name="border_color">#D0E8FB</color>
     <color name="inactive_color">#D0E8FB</color>
+    <color name="tertiary_color">#808080</color>
 </resources>
