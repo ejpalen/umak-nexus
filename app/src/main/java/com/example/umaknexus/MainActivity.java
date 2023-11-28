@@ -19,10 +19,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        startActivity(new Intent(getApplicationContext(), Home.class));
+        startActivity(new Intent(getApplicationContext(), FeedbackSupport.class));
 
         Button getStartedBtn = findViewById(R.id.getStarted_btn);
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation1);
+        //BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation1);
 
         getStartedBtn.setOnClickListener(new View.OnClickListener() {
             @Override

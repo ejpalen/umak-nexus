@@ -58,7 +58,7 @@
         android:background="@android:color/transparent"
         android:backgroundTint="@android:color/transparent"
         android:fontFamily="@font/syne"
-        android:text="< Profile"
+        android:text="Profile"
         android:textAllCaps="false"
         android:textSize="16sp"
         tools:layout_editor_absoluteX="16dp"
