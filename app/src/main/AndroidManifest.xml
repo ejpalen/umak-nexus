@@ -20,6 +20,9 @@
             android:name=".FeedbackSupport"
             android:exported="false" />
         <activity
+            android:name=".Shop_Products"
+            android:exported="false" />
+        <activity
             android:name=".Home"
             android:exported="false" />
         <activity
