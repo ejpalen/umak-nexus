@@ -4,5 +4,6 @@
     <string name="onboarding_description">Your one-stop destination for seamless and smart campus shopping, bringing convenience and quality to your fingertips.</string>
     <string name="onboarding_signIn_header">SIGN IN WITH YOUR UMAK ACCOUNT</string>
     <string name="onboarding_signIn_description">Personalize your shopping experience with UMAK NEXUS by connecting to your Umak Account.</string>
+    <string name="default_web_client_id">227913441721-nhhf9783vhjqni9pvbe1ghk88vr0m60g.apps.googleusercontent.com</string>
 </resources>
 
