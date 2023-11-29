@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        startActivity(new Intent(getApplicationContext(), FeedbackSupport.class));
+        startActivity(new Intent(getApplicationContext(), Changepass.class));
 
         Button getStartedBtn = findViewById(R.id.getStarted_btn);
         //BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation1);
@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         getStartedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), FeedbackSupport.class));
+                startActivity(new Intent(getApplicationContext(), Changepass.class));
             }
         });
 

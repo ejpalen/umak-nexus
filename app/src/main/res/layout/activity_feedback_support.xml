@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/backButton"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     app:layout_insetEdge="none"
     tools:context=".FeedbackSupport">
 
@@ -51,128 +51,128 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/btn_star_big_on" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:addStatesFromChildren="false"
-        android:background="#f2f2f2"
-        android:elevation="2dp"
-        android:padding="5dp"
-        app:itemIconSize="25dp"
-        app:itemIconTint="@drawable/item_selector"
-        app:itemRippleColor="@android:color/transparent"
-        app:labelVisibilityMode="unlabeled"
+
+    <ImageButton
+        android:id="@+id/idImgBtn"
+        android:layout_width="23dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="364dp"
+        android:layout_marginBottom="625dp"
+        android:background="@android:color/transparent"
+        android:padding="0dp"
+        android:src="@drawable/back_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_profile" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:backgroundTint="@android:color/transparent"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="322dp"
+        android:layout_marginBottom="623dp"
+        android:clickable="false"
         android:fontFamily="@font/syne"
         android:text="Profile"
-        android:textAllCaps="false"
+        android:textColor="@color/black"
         android:textSize="16sp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="30dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="374dp"
-        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="27dp"
+        android:layout_marginBottom="544dp"
         android:fontFamily="@font/syne_bold"
         android:text="Feedback and Support"
         android:textAlignment="center"
         android:textColor="#0057FF"
         android:textSize="28sp"
-        tools:layout_editor_absoluteX="21dp"
-        tools:layout_editor_absoluteY="96dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="364dp"
         android:layout_height="39dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="137dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="483dp"
         android:fontFamily="@font/syne_bold"
         android:text=" Send us your feedback!"
         android:textAlignment="inherit"
         android:textColor="#0B0909"
         android:textSize="22sp"
-        tools:layout_editor_absoluteX="26dp"
-        tools:layout_editor_absoluteY="144dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="364dp"
         android:layout_height="39dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="234dp"
+        android:layout_marginEnd="19dp"
+        android:layout_marginBottom="386dp"
         android:fontFamily="@font/syne_bold"
         android:text=" How was your experience?"
         android:textAlignment="inherit"
         android:textColor="#0B0909"
         android:textSize="18sp"
-        tools:layout_editor_absoluteX="23dp"
-        tools:layout_editor_absoluteY="245dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="361dp"
         android:layout_height="43dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="176dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="440dp"
         android:fontFamily="@font/syne"
         android:text="Do you have a suggestion or found some bug? Let us know    in the field below. "
         android:textAlignment="inherit"
         android:textColor="#070707"
-        tools:layout_editor_absoluteX="29dp"
-        tools:layout_editor_absoluteY="183dp" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/container"
-        android:layout_width="357dp"
-        android:layout_height="169dp"
-        android:background="#ECF6FE"
-        tools:layout_editor_absoluteX="29dp"
-        tools:layout_editor_absoluteY="378dp">
-
-        <EditText
-            android:id="@+id/editTextText2"
-            android:layout_width="345dp"
-            android:layout_height="157dp"
-            android:background="@android:color/transparent"
-            android:fontFamily="@font/syne"
-            android:gravity="start"
-            android:inputType="text"
-            android:outlineProvider="paddedBounds"
-            android:singleLine="false"
-            android:text="Describe your experience here."
-            android:textAlignment="viewStart"
-            android:textSize="16sp"
-            app:guidelineUseRtl="false"
-            tools:layout_editor_absoluteX="6dp"
-            tools:layout_editor_absoluteY="6dp" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="355dp"
-            android:layout_height="wrap_content"
-            tools:layout_editor_absoluteX="1dp"
-            tools:layout_editor_absoluteY="103dp" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/getStarted_btn2"
         android:layout_width="343dp"
         android:layout_height="53dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="565dp"
+        android:layout_marginEnd="33dp"
+        android:layout_marginBottom="41dp"
         android:background="@drawable/white_bg_round_corners"
         android:backgroundTint="#0057FF"
         android:fontFamily="@font/syne_bold"
         android:text="SEND FEEDBACK"
         android:textColor="@color/white"
-        tools:layout_editor_absoluteX="35dp"
-        tools:layout_editor_absoluteY="566dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -201,5 +201,59 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/btn_star_big_on" />
+
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="715dp"
+        android:background="#f2f2f2"
+        android:elevation="2dp"
+        android:padding="5dp"
+        app:itemIconSize="25dp"
+        app:itemIconTint="@drawable/item_selector"
+        app:itemRippleColor="@android:color/transparent"
+        app:labelVisibilityMode="unlabeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/bottom_profile" />
+
+    <ImageView
+        android:id="@+id/imageView12"
+        android:layout_width="326dp"
+        android:layout_height="171dp"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="361dp"
+        android:layout_marginEnd="43dp"
+        android:layout_marginBottom="127dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/bg_btn_item" />
+
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:layout_width="310dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="49dp"
+        android:layout_marginTop="364dp"
+        android:layout_marginEnd="52dp"
+        android:layout_marginBottom="270dp"
+        android:autoText="false"
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/syne"
+        android:hint="Describe your experience here."
+        android:textAlignment="viewStart"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
