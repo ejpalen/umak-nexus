@@ -7,13 +7,43 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Home extends AppCompatActivity {
+
+    TextView name_textView;
+
+    FirebaseAuth auth;
+    FirebaseUser user;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser == null) {
+            Intent intent = new Intent(getApplicationContext(), Onboarding_Signin.class);
+            startActivity(intent);
+            finish();
+        } else {
+            // Access user-related data here if needed
+            String displayName = user.getDisplayName();
+            String[] nameParts = displayName.split(" ");
+            String firstName = nameParts[0];
+
+            name_textView = findViewById(R.id.welcome_panel_textView);
+            name_textView.setText("Hi, " + firstName + "!");
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
