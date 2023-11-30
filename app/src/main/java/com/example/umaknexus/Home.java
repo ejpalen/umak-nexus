@@ -1,13 +1,13 @@
 package com.example.umaknexus;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -50,31 +50,35 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        EditText searchEditText = findViewById(R.id.searchEditText);
+        searchEditText.clearFocus();
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_home);
-//        bottomNavigationView.setOnItemSelectedListener(item -> {
-//            switch (item.getItemId()) {
-//                case R.id.bottom_home:
-//                    return true;
-//                case R.id.bottom_shop:
-//                    startActivity(new Intent(getApplicationContext(),Home.class));
-//                    finish();
-//                    return true;
-//                case R.id.bottom_cart:
-//                    startActivity(new Intent(getApplicationContext(),Home.class));
-//                    finish();
-//                    return true;
-//                case R.id.bottom_notifications:
-//                    startActivity(new Intent(getApplicationContext(),Home.class));
-//                    finish();
-//                    return true;
-//                case R.id.bottom_profile:
-//                    startActivity(new Intent(getApplicationContext(),Home.class));
-//                    finish();
-//                    return true;
-//            }
-//            return false;
-//        });
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.bottom_home) {
+                return true;
+            } else if (item.getItemId() == R.id.bottom_shop) {
+                startActivity(new Intent(getApplicationContext(), Shop_Products.class));
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.bottom_cart) {
+                startActivity(new Intent(getApplicationContext(), Cart_Page.class));
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.bottom_notifications) {
+                startActivity(new Intent(getApplicationContext(), Home.class));
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.bottom_profile) {
+                startActivity(new Intent(getApplicationContext(), Home.class));
+                finish();
+                return true;
+            }
+
+            return false;
+        });
+
 
         RecyclerView category_RecyclerView = findViewById(R.id.categoryRecyclerView);
 

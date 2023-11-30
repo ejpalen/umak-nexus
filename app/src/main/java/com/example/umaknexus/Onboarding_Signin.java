@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -24,10 +25,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
+import android.app.ProgressDialog;
 
 public class Onboarding_Signin extends AppCompatActivity {
-
-    Button signinButton;
+    ProgressDialog progressDialog;
+    RelativeLayout signinButton;
 
     FirebaseAuth auth;
 
@@ -64,6 +66,10 @@ public class Onboarding_Signin extends AppCompatActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Logging in...");
+        progressDialog.setCancelable(false);
+
         signinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,6 +79,7 @@ public class Onboarding_Signin extends AppCompatActivity {
 
     }
     private void googleSignIn(){
+        progressDialog.show();
         Intent intent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(intent, RC_SIGN_IN);
     }
@@ -89,6 +96,7 @@ public class Onboarding_Signin extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firbaseAuth(account.getIdToken());
             } catch (ApiException e) {
+                progressDialog.dismiss();
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
@@ -100,6 +108,7 @@ public class Onboarding_Signin extends AppCompatActivity {
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressDialog.dismiss();
                         if (task.isSuccessful()){
                             FirebaseUser user = auth.getCurrentUser();
 
@@ -118,6 +127,7 @@ public class Onboarding_Signin extends AppCompatActivity {
 
                             Intent intent = new Intent(Onboarding_Signin.this, Home.class);
                             startActivity(intent);
+                            finish();
                         }
                         else{
                             Toast.makeText(Onboarding_Signin.this, "Something went wrong", Toast.LENGTH_SHORT).show();

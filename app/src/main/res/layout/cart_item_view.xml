@@ -9,14 +9,16 @@
         android:id="@+id/addtocart_LinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:layout_marginBottom="5dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <FrameLayout
             android:id="@+id/cart_LinearLayout"
-            android:layout_width="350dp"
-            android:layout_height="105sp"
-            android:layout_marginStart="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center_horizontal|center_vertical"
+            android:layout_weight="2"
             android:background="@drawable/cart_bg"
             android:padding="20dp">
 
@@ -34,7 +36,7 @@
                 android:layout_marginStart="80dp"
                 android:layout_marginTop="13dp"
                 android:layout_toEndOf="@+id/img_product"
-                android:fontFamily="@font/syne"
+                android:fontFamily="@font/syne_bold"
                 android:textColor="@color/black"
                 tools:text="Uniform L" />
 
@@ -55,9 +57,9 @@
                 android:id="@+id/qty_LinearLayout"
                 android:layout_width="100dp"
                 android:layout_height="30dp"
+                android:layout_gravity="right|center_vertical"
                 android:layout_marginStart="200dp"
-                android:orientation="horizontal"
-                android:layout_gravity="center_vertical">
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btn_subtract"
@@ -73,11 +75,11 @@
                     android:id="@+id/qty_item"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:layout_gravity="center_horizontal"
                     android:background="@drawable/bg_btn_item"
                     android:fontFamily="@font/syne"
-                    android:textAlignment="center"
-                    android:layout_gravity="center_horizontal"
                     android:text="1"
+                    android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
@@ -98,8 +100,8 @@
             android:id="@+id/delete_btn"
             android:layout_width="22sp"
             android:layout_height="27sp"
-            android:background="@drawable/delete_btn"
-            android:layout_marginLeft="13dp"/>
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/delete_btn" />
 
 
     </LinearLayout>
