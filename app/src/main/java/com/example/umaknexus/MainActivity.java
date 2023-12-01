@@ -1,7 +1,6 @@
 package com.example.umaknexus;
 
 import static com.example.umaknexus.R.id.bottomNavigation;
-import static com.example.umaknexus.R.id.bottomNavigation1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
