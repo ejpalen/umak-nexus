@@ -9,6 +9,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,5 +150,31 @@ public class Notifications extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(Notifications.this));
         recyclerView.setAdapter(new NotificationAdapter(getApplicationContext(),items));
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        bottomNavigationView.setSelectedItemId(R.id.bottom_shop);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.bottom_home) {
+                startActivity(new Intent(getApplicationContext(), Home.class));
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.bottom_shop) {
+                return true;
+            } else if (item.getItemId() == R.id.bottom_cart) {
+                startActivity(new Intent(getApplicationContext(), Cart_Page.class));
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.bottom_notifications) {
+                startActivity(new Intent(getApplicationContext(), Home.class));
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.bottom_profile) {
+                startActivity(new Intent(getApplicationContext(), Home.class));
+                finish();
+                return true;
+            }
+
+            return false;
+        });
     }
 }
