@@ -28,6 +28,9 @@
             android:name=".Cart_Page"
             android:exported="false" />
         <activity
+            android:name=".ProductPage"
+            android:exported="false" />
+        <activity
             android:name=".Shop_Products"
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:exported="false" />
