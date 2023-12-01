@@ -5,7 +5,10 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,32 @@ public class Shop_Products extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_products);
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        bottomNavigationView.setSelectedItemId(R.id.bottom_shop);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.bottom_home) {
+                startActivity(new Intent(getApplicationContext(), Home.class));
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.bottom_shop) {
+                return true;
+            } else if (item.getItemId() == R.id.bottom_cart) {
+                startActivity(new Intent(getApplicationContext(), Cart_Page.class));
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.bottom_notifications) {
+                startActivity(new Intent(getApplicationContext(), Home.class));
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.bottom_profile) {
+                startActivity(new Intent(getApplicationContext(), Home.class));
+                finish();
+                return true;
+            }
+
+            return false;
+        });
 
         RecyclerView category_RecyclerView = findViewById(R.id.categoryRecyclerView);
         shopProductrecyclerView=findViewById(R.id.shopProductRecyclerView);

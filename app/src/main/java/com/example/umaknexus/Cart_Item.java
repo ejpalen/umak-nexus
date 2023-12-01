@@ -1,10 +1,10 @@
 package com.example.umaknexus;
 
 public class Cart_Item {
-    String prodName, prodPrice;
-    int qty_item, img_product, delete_btn;
+    String prodName, prodPrice, qty_item;
+    int img_product, delete_btn;
 
-    public Cart_Item(String prodName, String prodPrice, int qty_item, int img_product, int delete_btn) {
+    public Cart_Item(String prodName, String prodPrice, String qty_item, int img_product, int delete_btn) {
         this.prodName = prodName;
         this.prodPrice = prodPrice;
         this.qty_item = qty_item;
@@ -28,11 +28,11 @@ public class Cart_Item {
         this.prodPrice = prodPrice;
     }
 
-    public int getQty_item() {
+    public String getQty_item() {
         return qty_item;
     }
 
-    public void setQty_item(int qty_item) {
+    public void setQty_item(String qty_item) {
         this.qty_item = qty_item;
     }
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "227913441721",
+    "project_id": "umak-nexus-53bf2",
+    "storage_bucket": "umak-nexus-53bf2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:227913441721:android:019f9e349209508e839668",
+        "android_client_info": {
+          "package_name": "com.example.umaknexus"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmF_4wFvLmjylRgpc24JH6xyOdkat7TqU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
