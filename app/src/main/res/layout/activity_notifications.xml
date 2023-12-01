@@ -12,7 +12,7 @@
         tools:text="Notifications"
         android:textColor="#0057FF"
         android:textSize="38sp"
-        android:textStyle="bold"
+        android:fontFamily="@font/syne_bold"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
