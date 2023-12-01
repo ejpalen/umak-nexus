@@ -1,11 +1,16 @@
 package com.example.umaknexus;
 
+import static com.example.umaknexus.R.id.bottomNavigation;
+import static com.example.umaknexus.R.id.bottomNavigation1;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,9 +34,8 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
-        //startActivity(new Intent(getApplicationContext(), Home.class));
-
         Button getStartedBtn = findViewById(R.id.getStarted_btn);
+        //BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation1);
 
         getStartedBtn.setOnClickListener(new View.OnClickListener() {
             @Override

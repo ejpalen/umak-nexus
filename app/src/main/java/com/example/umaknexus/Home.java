@@ -48,12 +48,12 @@ public class Home extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
 
         EditText searchEditText = findViewById(R.id.searchEditText);
         searchEditText.clearFocus();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+
         bottomNavigationView.setSelectedItemId(R.id.bottom_home);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.bottom_home) {
