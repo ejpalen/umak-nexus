@@ -9,23 +9,23 @@
         android:id="@+id/category_LinearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="5dp"
         android:background="@drawable/category_bg"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="10dp">
 
         <ImageView
             android:id="@+id/category_ImageView"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             app:srcCompat="@drawable/books_icon" />
 
         <TextView
             android:id="@+id/category_Textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:fontFamily="@font/syne"
             android:text="Category"
             android:textColor="@color/black" />

@@ -68,7 +68,7 @@ public class Home extends AppCompatActivity {
                 finish();
                 return true;
             } else if (item.getItemId() == R.id.bottom_notifications) {
-                startActivity(new Intent(getApplicationContext(), Home.class));
+                startActivity(new Intent(getApplicationContext(), Notifications.class));
                 finish();
                 return true;
             } else if (item.getItemId() == R.id.bottom_profile) {
@@ -85,9 +85,11 @@ public class Home extends AppCompatActivity {
 
         List<Categories>  categoryItems= new ArrayList<Categories>();
         categoryItems.add(new Categories("All", R.drawable.all_icon));
-        categoryItems.add(new Categories("Lace", R.drawable.lace_icon));
-        categoryItems.add(new Categories("Books", R.drawable.books_icon));
+        categoryItems.add(new Categories("Bestsellers", R.drawable.bestsellers_icon));
+        categoryItems.add(new Categories("Latest", R.drawable.latest_icon));
         categoryItems.add(new Categories("Uniform", R.drawable.uniform_icon));
+        categoryItems.add(new Categories("Books", R.drawable.books_icon));
+        categoryItems.add(new Categories("ID Lace", R.drawable.lace_icon));
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         category_RecyclerView.setLayoutManager(layoutManager);

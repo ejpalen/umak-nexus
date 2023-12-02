@@ -70,6 +70,7 @@
                     android:layout_toEndOf="@id/searchIcon"
                     android:background="@color/secondary_color"
                     android:fontFamily="@font/syne"
+                    android:hapticFeedbackEnabled="true"
                     android:hint="Search" />
             </RelativeLayout>
 
@@ -91,6 +92,8 @@
                     android:text="Categories"
                     android:textColor="@color/black"
                     android:textSize="21sp" />
+
+
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/categoryRecyclerView"
@@ -242,6 +245,7 @@
         android:layout_alignParentBottom="true"
         android:background="#f2f2f2"
         android:elevation="2dp"
+        android:hapticFeedbackEnabled="true"
         android:padding="5dp"
         app:itemIconSize="25dp"
         app:itemIconTint="@drawable/item_selector"

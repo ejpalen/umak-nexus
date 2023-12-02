@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/header"
-        android:layout_width="wrap_content"
+        android:id="@+id/textView6"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        tools:text="Notifications"
-        android:textColor="#0057FF"
-        android:textSize="38sp"
-        android:fontFamily="@font/syne_bold"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:fontFamily="@font/syne_bold"
+        android:text="Notifications"
+        android:textColor="@color/main_color"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/notificationCategorySV"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <HorizontalScrollView
         android:id="@+id/notificationCategorySV"
@@ -25,85 +26,94 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header">
+        app:layout_constraintTop_toBottomOf="@+id/textView6">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
+
             <Button
                 android:id="@+id/allBtn"
                 android:layout_width="80dp"
                 android:layout_height="30dp"
-                android:text="All"
-                android:background="@drawable/notification_filter_selector"
-                android:textColor="@drawable/notification_text_color_selected"
-                android:textAllCaps="false"
                 android:layout_marginStart="20dp"
-                />
+                android:background="@drawable/notification_filter_selector"
+                android:fontFamily="@font/syne"
+                android:text="All"
+                android:textAllCaps="false"
+                android:textColor="@drawable/notification_text_color_selected" />
 
             <Button
                 android:id="@+id/orderUpdateBtn"
                 android:layout_width="130dp"
                 android:layout_height="30dp"
-                android:text="Order Updates"
-                android:layout_toEndOf="@+id/allBtn"
                 android:layout_marginLeft="5dp"
+                android:layout_toEndOf="@+id/allBtn"
                 android:background="@drawable/notification_filter_selector"
-                android:textColor="@drawable/notification_text_color_selected"
+                android:fontFamily="@font/syne"
+                android:text="Order Updates"
                 android:textAllCaps="false"
-                />
+                android:textColor="@drawable/notification_text_color_selected" />
 
             <Button
                 android:id="@+id/systemMaintenanceBtn"
                 android:layout_width="170dp"
                 android:layout_height="30dp"
-                android:text="System Maintenance"
-                android:layout_toEndOf="@+id/orderUpdateBtn"
                 android:layout_marginLeft="5dp"
+                android:layout_toEndOf="@+id/orderUpdateBtn"
                 android:background="@drawable/notification_filter_selector"
-                android:textColor="@drawable/notification_text_color_selected"
+                android:fontFamily="@font/syne"
+                android:text="System Maintenance"
                 android:textAllCaps="false"
-                />
+                android:textColor="@drawable/notification_text_color_selected" />
 
             <Button
                 android:id="@+id/feedbackRequestBtn"
                 android:layout_width="160dp"
                 android:layout_height="30dp"
-                android:text="Feedback Request"
-                android:layout_toEndOf="@+id/systemMaintenanceBtn"
                 android:layout_marginLeft="5dp"
+                android:layout_toEndOf="@+id/systemMaintenanceBtn"
                 android:background="@drawable/notification_filter_selector"
-                android:textColor="@drawable/notification_text_color_selected"
+                android:fontFamily="@font/syne"
+                android:text="Feedback Request"
                 android:textAllCaps="false"
-                />
+                android:textColor="@drawable/notification_text_color_selected" />
 
             <Button
                 android:id="@+id/emergencyAlertBtn"
                 android:layout_width="150dp"
                 android:layout_height="30dp"
-                android:text="Emergency Alert"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="20dp"
                 android:layout_toEndOf="@+id/feedbackRequestBtn"
-                android:layout_marginLeft="5dp"
                 android:background="@drawable/notification_filter_selector"
-                android:textColor="@drawable/notification_text_color_selected"
+                android:fontFamily="@font/syne"
+                android:text="Emergency Alert"
                 android:textAllCaps="false"
-                />
+                android:textColor="@drawable/notification_text_color_selected" />
+
         </LinearLayout>
     </HorizontalScrollView>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="20dp"
         android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/notificationCategorySV">
+
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_notifications"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/recyclerview_notifications"/>
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="15dp" />
     </ScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -111,6 +121,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="1dp"
         android:background="#f2f2f2"
         android:elevation="2dp"
         android:padding="5dp"
@@ -119,8 +130,6 @@
         app:itemRippleColor="@android:color/transparent"
         app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

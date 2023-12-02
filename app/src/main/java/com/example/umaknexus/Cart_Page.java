@@ -33,7 +33,7 @@ public class Cart_Page extends AppCompatActivity {
             } else if (item.getItemId() == R.id.bottom_cart) {
                 return true;
             } else if (item.getItemId() == R.id.bottom_notifications) {
-                startActivity(new Intent(getApplicationContext(), Home.class));
+                startActivity(new Intent(getApplicationContext(), Notifications.class));
                 finish();
                 return true;
             } else if (item.getItemId() == R.id.bottom_profile) {

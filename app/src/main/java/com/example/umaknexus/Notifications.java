@@ -69,6 +69,13 @@ public class Notifications extends AppCompatActivity {
 
                 List<NotificationItem> items = new ArrayList<NotificationItem>();
                 items.add(new NotificationItem("Order Update", "Your Order #52114 is ready to be picked up on COOP Office."));
+                items.add(new NotificationItem("Order Update", "Your Order #52114 is ready to be picked up on COOP Office."));
+                items.add(new NotificationItem("Order Update", "Your Order #52114 is ready to be picked up on COOP Office."));
+                items.add(new NotificationItem("Order Update", "Your Order #52114 is ready to be picked up on COOP Office."));
+                items.add(new NotificationItem("Order Update", "Your Order #52114 is ready to be picked up on COOP Office."));
+                items.add(new NotificationItem("Order Update", "Your Order #52114 is ready to be picked up on COOP Office."));
+                items.add(new NotificationItem("Order Update", "Your Order #52114 is ready to be picked up on COOP Office."));
+                items.add(new NotificationItem("Order Update", "Your Order #52114 is ready to be picked up on COOP Office."));
 
                 recyclerView.setLayoutManager(new LinearLayoutManager(Notifications.this));
                 recyclerView.setAdapter(new NotificationAdapter(getApplicationContext(),items));
@@ -152,21 +159,21 @@ public class Notifications extends AppCompatActivity {
         recyclerView.setAdapter(new NotificationAdapter(getApplicationContext(),items));
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
-        bottomNavigationView.setSelectedItemId(R.id.bottom_shop);
+        bottomNavigationView.setSelectedItemId(R.id.bottom_notifications);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.bottom_home) {
                 startActivity(new Intent(getApplicationContext(), Home.class));
                 finish();
                 return true;
             } else if (item.getItemId() == R.id.bottom_shop) {
+                startActivity(new Intent(getApplicationContext(), Shop_Products.class));
+                finish();
                 return true;
             } else if (item.getItemId() == R.id.bottom_cart) {
                 startActivity(new Intent(getApplicationContext(), Cart_Page.class));
                 finish();
                 return true;
             } else if (item.getItemId() == R.id.bottom_notifications) {
-                startActivity(new Intent(getApplicationContext(), Home.class));
-                finish();
                 return true;
             } else if (item.getItemId() == R.id.bottom_profile) {
                 startActivity(new Intent(getApplicationContext(), Home.class));
