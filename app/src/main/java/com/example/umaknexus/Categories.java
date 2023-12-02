@@ -1,27 +1,27 @@
 package com.example.umaknexus;
 
 public class Categories {
-    String name;
-    int image;
+    String Category_name;
+    String icon;
 
-    public Categories(String name, int image) {
-        this.name = name;
-        this.image = image;
+    public Categories(String Category_name, String icon) {
+        this.Category_name = Category_name;
+        this.icon = icon;
     }
 
     public String getName() {
-        return name;
+        return Category_name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String Category_name) {
+        this.Category_name = Category_name;
     }
 
-    public int getImage() {
-        return image;
+    public String getImage() {
+        return icon;
     }
 
-    public void setImage(int image) {
-        this.image = image;
+    public void setImage(String icon) {
+        this.icon = icon;
     }
 }

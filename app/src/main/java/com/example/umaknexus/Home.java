@@ -1,10 +1,13 @@
 package com.example.umaknexus;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,16 +15,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Home extends AppCompatActivity {
-
     TextView name_textView;
-
     FirebaseAuth auth;
     FirebaseUser user;
+    FirebaseFirestore database;
+    List<Categories>  categoryItems;
+    private CategoryAdapter categoryAdapter;
 
     @Override
     public void onStart() {
@@ -49,6 +59,8 @@ public class Home extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        database = FirebaseFirestore.getInstance();
 
         EditText searchEditText = findViewById(R.id.searchEditText);
         searchEditText.clearFocus();
@@ -80,20 +92,16 @@ public class Home extends AppCompatActivity {
             return false;
         });
 
-
         RecyclerView category_RecyclerView = findViewById(R.id.categoryRecyclerView);
 
-        List<Categories>  categoryItems= new ArrayList<Categories>();
-        categoryItems.add(new Categories("All", R.drawable.all_icon));
-        categoryItems.add(new Categories("Bestsellers", R.drawable.bestsellers_icon));
-        categoryItems.add(new Categories("Latest", R.drawable.latest_icon));
-        categoryItems.add(new Categories("Uniform", R.drawable.uniform_icon));
-        categoryItems.add(new Categories("Books", R.drawable.books_icon));
-        categoryItems.add(new Categories("ID Lace", R.drawable.lace_icon));
+        categoryItems = new ArrayList<>();
+        categoryAdapter = new CategoryAdapter(getApplicationContext(), categoryItems);
+
+        getCategoryItems();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         category_RecyclerView.setLayoutManager(layoutManager);
-        category_RecyclerView.setAdapter(new CategoryAdapter(getApplicationContext(), categoryItems));
+        category_RecyclerView.setAdapter(categoryAdapter);
 
         List<Products> productsItems=new ArrayList<Products>();
         productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
@@ -118,5 +126,36 @@ public class Home extends AppCompatActivity {
         LinearLayoutManager bestSellers_NewlayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         bestSellers_RecyclerView.setLayoutManager(bestSellers_NewlayoutManager);
         bestSellers_RecyclerView.setAdapter(new NewArrivals_Products_Adapter(getApplication(), productsItems));
+    }
+
+    private void getCategoryItems(){
+        database.collection("categories")
+                .orderBy("Category_name", Query.Direction.ASCENDING)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @SuppressLint("NotifyDataSetChanged")
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.e("Firestore error: ", error.getMessage());
+                            return; // Stop processing if there's an error
+                        }
+
+                        for (DocumentChange dc : value.getDocumentChanges()) {
+                            if (dc.getType() == DocumentChange.Type.ADDED) {
+                                String categoryName = dc.getDocument().getString("Category_name");
+                                String icon = dc.getDocument().getString("Icon");
+
+                                if (categoryName != null && icon != null) {
+                                    categoryItems.add(new Categories(categoryName, icon));
+                                } else {
+                                    Log.e("Firestore error: ", "One or more fields are null.");
+                                }
+                            }
+                        }
+                        // Notify the adapter after adding items
+                        categoryAdapter.notifyDataSetChanged();
+
+                    }
+                });
     }
 }

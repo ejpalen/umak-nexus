@@ -1,14 +1,23 @@
 package com.example.umaknexus;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +25,18 @@ import java.util.List;
 public class Shop_Products extends AppCompatActivity {
 
     private RecyclerView shopProductrecyclerView;
+    FirebaseFirestore database;
+
+    List<Categories>  categoryItems;
+
+    private CategoryAdapter categoryAdapter;
     RecyclerView.LayoutManager layoutManager, shopProductLayoutManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_products);
+
+        database = FirebaseFirestore.getInstance();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_shop);
@@ -51,13 +67,10 @@ public class Shop_Products extends AppCompatActivity {
         RecyclerView category_RecyclerView = findViewById(R.id.categoryRecyclerView);
         shopProductrecyclerView=findViewById(R.id.shopProductRecyclerView);
 
-        List<Categories> categoryItems= new ArrayList<Categories>();
-        categoryItems.add(new Categories("All", R.drawable.all_icon));
-        categoryItems.add(new Categories("Bestsellers", R.drawable.bestsellers_icon));
-        categoryItems.add(new Categories("Latest", R.drawable.latest_icon));
-        categoryItems.add(new Categories("Uniform", R.drawable.uniform_icon));
-        categoryItems.add(new Categories("Books", R.drawable.books_icon));
-        categoryItems.add(new Categories("ID Lace", R.drawable.lace_icon));
+        categoryItems = new ArrayList<>();
+        categoryAdapter = new CategoryAdapter(getApplicationContext(), categoryItems);
+
+        getCategoryItems();
 
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
@@ -81,5 +94,35 @@ public class Shop_Products extends AppCompatActivity {
 
 
 
+    }
+    private void getCategoryItems(){
+        database.collection("categories")
+                .orderBy("Category_name", Query.Direction.ASCENDING)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @SuppressLint("NotifyDataSetChanged")
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.e("Firestore error: ", error.getMessage());
+                            return; // Stop processing if there's an error
+                        }
+
+                        for (DocumentChange dc : value.getDocumentChanges()) {
+                            if (dc.getType() == DocumentChange.Type.ADDED) {
+                                String categoryName = dc.getDocument().getString("Category_name");
+                                String icon = dc.getDocument().getString("Icon");
+
+                                if (categoryName != null && icon != null) {
+                                    categoryItems.add(new Categories(categoryName, icon));
+                                } else {
+                                    Log.e("Firestore error: ", "One or more fields are null.");
+                                }
+                            }
+                        }
+                        // Notify the adapter after adding items
+                        categoryAdapter.notifyDataSetChanged();
+
+                    }
+                });
     }
 }
