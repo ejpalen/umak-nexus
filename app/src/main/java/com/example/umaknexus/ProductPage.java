@@ -11,20 +11,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class ProductPage extends AppCompatActivity {
-
+    Button btn_s, btn_m, btn_l, btn_addtocart, btn_addtowishlist;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_productpage);
 
 //        public void onSizeButtonClick(View view){
-//            // Reset background color for all buttons
+////            Reset background color for all buttons
+//            Button btn_s = findViewById(R.id.btn_s);
+//            Button btn_m = findViewById(R.id.btn_m);
+//            Button btn_l = findViewById(R.id.btn_l);
 //            Button btn_addtocart = findViewById(R.id.btn_addtocart);
 //            Button btn_addtowishlist = findViewById(R.id.btn_addtowishlist);
 //
+//            btn_s.setSelected(R.id.btn_s);
+//            btn_m.setSelected(R.id.btn_m);
+//            btn_l.setSelected(R.id.btn_l);
 //            btn_addtocart.setSelected(R.id.btn_addtocart);
 //            btn_addtowishlist.setSelected(R.id.btn_addtowishlist);
-
+//
 //            // Set background color for the clicked button
 //            Button clickedButton = (Button) view;
 //            clickedButton.setBackgroundResource(R.drawable.item_selector_selected);

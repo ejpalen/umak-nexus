@@ -110,27 +110,73 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/prodName" />
 
-    <!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
-<!--        android:id="@+id/productsizes"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:layout_marginStart="25dp"-->
-<!--        android:layout_marginTop="3dp"-->
-<!--        android:textSize="16sp"-->
-<!--        android:textColor="@color/white"-->
-<!--        android:layout_weight="1"-->
-<!--        android:fontFamily="@font/syne"-->
-<!--        android:elevation="2dp"-->
-<!--        android:padding="5dp"-->
-<!--        app:itemIconSize="25dp"-->
-<!--        android:background="#f2f2f2"-->
-<!--        app:itemIconTint="@drawable/item_selector"-->
-<!--        app:itemRippleColor="@android:color/transparent"-->
-<!--        app:labelVisibilityMode="unlabeled"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/size"-->
-<!--        app:menu="@menu/product_size" />-->
+    <TextView
+        android:id="@+id/size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/syne"
+        android:text="Size"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/price" />
+
+    <LinearLayout
+        android:id="@+id/size_LinearLayout"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="3dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/size">
+
+        <Button
+            android:id="@+id/btn_s"
+            android:layout_width="350dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_m"
+            android:fontFamily="@font/syne"
+            android:text="S"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_m"
+            android:layout_width="350dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_m"
+            android:fontFamily="@font/syne"
+            android:text="M"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_l"
+            android:layout_width="350dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_btn_m"
+            android:fontFamily="@font/syne"
+            android:text="L"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/quantity"
@@ -143,7 +189,7 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/price" />
+        app:layout_constraintTop_toBottomOf="@+id/size_LinearLayout" />
 
     <LinearLayout
         android:id="@+id/qty_LinearLayout"

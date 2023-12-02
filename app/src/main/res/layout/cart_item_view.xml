@@ -1,109 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="120dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
     xmlns:tools="http://schemas.android.com/tools">
 
 
-    <LinearLayout
-        android:id="@+id/addtocart_LinearLayout"
-        android:layout_width="match_parent"
+    <FrameLayout
+        android:id="@+id/cart_LinearLayout"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <FrameLayout
-            android:id="@+id/cart_LinearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|center_horizontal|center_vertical"
-            android:layout_weight="2"
-            android:background="@drawable/cart_bg"
-            android:padding="20dp">
-
-
-            <ImageView
-                android:id="@+id/img_product"
-                android:layout_width="67sp"
-                android:layout_height="67dp"
-                android:background="@drawable/sample_image" />
-
-            <TextView
-                android:id="@+id/prodName"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
-                android:layout_marginTop="13dp"
-                android:layout_toEndOf="@+id/img_product"
-                android:fontFamily="@font/syne_bold"
-                android:textColor="@color/black"
-                tools:text="Uniform L" />
-
-            <TextView
-                android:id="@+id/prodPrice"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/prodName"
-                android:layout_marginStart="80dp"
-                android:layout_marginTop="30dp"
-                android:layout_toEndOf="@+id/img_product"
-                android:fontFamily="@font/syne"
-                android:textColor="@color/black"
-                tools:text="₱300.00" />
-
-
-            <LinearLayout
-                android:id="@+id/qty_LinearLayout"
-                android:layout_width="100dp"
-                android:layout_height="30dp"
-                android:layout_gravity="right|center_vertical"
-                android:layout_marginStart="200dp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btn_subtract"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/bg_btn_add"
-                    android:fontFamily="@font/syne"
-                    android:text="-"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/qty_item"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/bg_btn_item"
-                    android:fontFamily="@font/syne"
-                    android:text="1"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-
-                <Button
-                    android:id="@+id/btn_add"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/bg_btn_add"
-                    android:fontFamily="@font/syne"
-                    android:text="+"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-        </FrameLayout>
+        android:layout_gravity="center|center_horizontal|center_vertical"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/cart_bg"
+        android:padding="20dp">
 
         <ImageView
+            android:id="@+id/img_product"
+            android:layout_width="67sp"
+            android:layout_height="67dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/sample_image" />
+
+        <TextView
+            android:id="@+id/prodName"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/img_product"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="80dp"
+            android:fontFamily="@font/syne_bold"
+            android:textColor="@color/black"
+            tools:text="Uniform L" />
+
+        <TextView
+            android:id="@+id/prodPrice"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_below="@id/prodName"
+            android:layout_toRightOf="@id/img_product"
+            android:layout_marginLeft="80dp"
+            android:fontFamily="@font/syne"
+            android:textColor="@color/black"
+            tools:text="₱300.00" />
+
+        <LinearLayout
+            android:id="@+id/qty_LinearLayout"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginStart="200dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_subtract"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/bg_btn_add"
+                android:fontFamily="@font/syne"
+                android:text="-"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/qty_item"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/bg_btn_item"
+                android:fontFamily="@font/syne"
+                android:text="1"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btn_add"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/bg_btn_add"
+                android:fontFamily="@font/syne"
+                android:text="+"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <ImageView
             android:id="@+id/delete_btn"
             android:layout_width="22sp"
             android:layout_height="27sp"
             android:layout_marginLeft="10dp"
             android:background="@drawable/delete_btn" />
 
-
-    </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>
