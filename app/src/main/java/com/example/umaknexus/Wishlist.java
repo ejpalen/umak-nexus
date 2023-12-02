@@ -38,25 +38,25 @@ public class Wishlist extends AppCompatActivity {
         productWishlist.setAdapter(new shopProductsAdapter(getApplication(), wishlistItems));
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
-        bottomNavigationView.setSelectedItemId(R.id.bottom_shop);
+        bottomNavigationView.setSelectedItemId(R.id.bottom_profile);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.bottom_home) {
                 startActivity(new Intent(getApplicationContext(), Home.class));
                 finish();
                 return true;
             } else if (item.getItemId() == R.id.bottom_shop) {
+                startActivity(new Intent(getApplicationContext(), Shop_Products.class));
+                finish();
                 return true;
             } else if (item.getItemId() == R.id.bottom_cart) {
                 startActivity(new Intent(getApplicationContext(), Cart_Page.class));
                 finish();
                 return true;
             } else if (item.getItemId() == R.id.bottom_notifications) {
-                startActivity(new Intent(getApplicationContext(), Home.class));
+                startActivity(new Intent(getApplicationContext(), Notifications.class));
                 finish();
                 return true;
             } else if (item.getItemId() == R.id.bottom_profile) {
-                startActivity(new Intent(getApplicationContext(), Home.class));
-                finish();
                 return true;
             }
 
