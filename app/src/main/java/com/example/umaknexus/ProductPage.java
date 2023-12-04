@@ -40,30 +40,30 @@ public class ProductPage extends AppCompatActivity {
 //        }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
-        bottomNavigationView.setSelectedItemId(R.id.bottom_shop);
-//        bottomNavigationView.setOnItemSelectedListener(item -> {
-//            switch (item.getItemId()) {
-//                case R.id.bottom_home:
-//                    return true;
-//                case R.id.bottom_shop:
-//                    startActivity(new Intent(getApplicationContext(),Home.class));
-//                    finish();
-//                    return true;
-//                case R.id.bottom_cart:
-//                    startActivity(new Intent(getApplicationContext(),Home.class));
-//                    finish();
-//                    return true;
-//                case R.id.bottom_notifications:
-//                    startActivity(new Intent(getApplicationContext(),Home.class));
-//                    finish();
-//                    return true;
-//                case R.id.bottom_profile:
-//                    startActivity(new Intent(getApplicationContext(),Home.class));
-//                    finish();
-//                    return true;
-//            }
-//            return false;
-//        });
+        bottomNavigationView.setSelectedItemId(R.id.bottom_cart);
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.bottom_home) {
+                startActivity(new Intent(getApplicationContext(), Home.class));
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.bottom_shop) {
+                startActivity(new Intent(getApplicationContext(), Shop_Products.class));
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.bottom_cart) {
+                return true;
+            } else if (item.getItemId() == R.id.bottom_notifications) {
+                startActivity(new Intent(getApplicationContext(), Notifications.class));
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.bottom_profile) {
+                startActivity(new Intent(getApplicationContext(), Home.class));
+                finish();
+                return true;
+            }
+
+            return false;
+       });
 
 
     }
