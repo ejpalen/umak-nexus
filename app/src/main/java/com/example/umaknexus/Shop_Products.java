@@ -10,6 +10,8 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentChange;
@@ -28,13 +30,14 @@ public class Shop_Products extends AppCompatActivity {
     FirebaseFirestore database;
 
     List<Categories>  categoryItems;
-
+    EditText searchEditText;
     private CategoryAdapter categoryAdapter;
     RecyclerView.LayoutManager layoutManager, shopProductLayoutManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_products);
+
 
         database = FirebaseFirestore.getInstance();
 
@@ -64,6 +67,7 @@ public class Shop_Products extends AppCompatActivity {
             return false;
         });
 
+        searchEditText= findViewById(R.id.searchEditText);
         RecyclerView category_RecyclerView = findViewById(R.id.categoryRecyclerView);
         shopProductrecyclerView=findViewById(R.id.shopProductRecyclerView);
 
@@ -92,7 +96,12 @@ public class Shop_Products extends AppCompatActivity {
         shopProductrecyclerView.setAdapter(new shopProductsAdapter(getApplication(), productsItems));
 
 
-
+        searchEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), SearchPage.class));
+            }
+        });
 
     }
     private void getCategoryItems(){
