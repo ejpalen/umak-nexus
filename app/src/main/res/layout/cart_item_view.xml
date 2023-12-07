@@ -1,57 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:orientation="horizontal">
 
 
-    <FrameLayout
-        android:id="@+id/cart_LinearLayout"
-        android:layout_width="370dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center|center_horizontal|center_vertical"
-        android:background="@drawable/cart_bg"
+        android:layout_weight="1"
+        android:background="@drawable/category_bg"
         android:padding="20dp">
 
         <ImageView
             android:id="@+id/img_product"
-            android:layout_width="67sp"
-            android:layout_height="67dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="10dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:background="@drawable/sample_image" />
 
-        <TextView
-            android:id="@+id/prodName"
-            android:layout_width="70dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/img_product"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="80dp"
-            android:fontFamily="@font/syne_bold"
-            android:textColor="@color/black"
-            tools:text="Uniform L" />
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/prodPrice"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:layout_below="@id/prodName"
-            android:layout_toRightOf="@id/img_product"
-            android:layout_marginLeft="80dp"
-            android:fontFamily="@font/syne"
-            android:textColor="@color/black"
-            tools:text="₱300.00" />
+            <TextView
+                android:id="@+id/prodName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/img_product"
+                android:fontFamily="@font/syne_bold"
+                android:textColor="@color/black"
+                tools:text="Uniform L" />
+
+            <TextView
+                android:id="@+id/prodPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/prodName"
+                android:layout_toRightOf="@id/img_product"
+                android:fontFamily="@font/syne"
+                android:textColor="@color/black"
+                tools:text="₱300.00" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/qty_LinearLayout"
-            android:layout_width="100dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="right|center_vertical"
-            android:layout_marginStart="200dp"
             android:orientation="horizontal">
 
             <Button
@@ -87,13 +90,13 @@
                 android:textSize="16sp" />
 
         </LinearLayout>
-    </FrameLayout>
+    </LinearLayout>
 
     <ImageView
-            android:id="@+id/delete_btn"
-            android:layout_width="22sp"
-            android:layout_height="27sp"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/delete_btn" />
+        android:id="@+id/delete_btn"
+        android:layout_width="18dp"
+        android:layout_height="22dp"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/delete_btn" />
 
 </LinearLayout>
