@@ -6,4 +6,8 @@
     </style>
 
     <style name="Theme.UMakNexus" parent="Base.Theme.UMakNexus" />
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlActivated">@color/tertiary_color</item>
+    </style>
+
 </resources>
