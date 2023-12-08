@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="preloaded_fonts" translatable="false">
+        <item>@font/syne</item>
         <item>@font/syne_bold</item>
+        <item>@font/syne_medium</item>
         <item>@font/syne_semibold</item>
     </array>
 </resources>

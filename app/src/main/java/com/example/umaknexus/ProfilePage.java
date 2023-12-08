@@ -35,10 +35,9 @@ public class ProfilePage extends AppCompatActivity {
         // Initialize FirebaseAuth
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        FirebaseUser currentUser = auth.getCurrentUser();
         String displayName = user.getDisplayName();
         String displayEmail = user.getEmail();
-        Uri displayImageUri = currentUser.getPhotoUrl();
+        Uri displayImageUri = user.getPhotoUrl();
         TextView userName = findViewById(R.id.profile_name);
         userName.setText(displayName);
         TextView userEmail = findViewById(R.id.profile_email);

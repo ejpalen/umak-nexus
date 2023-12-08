@@ -29,10 +29,9 @@ public class Edit_Profile extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
-        FirebaseUser currentUser = auth.getCurrentUser();
         String displayName = user.getDisplayName();
         String displayEmail = user.getEmail();
-        Uri displayImageUri = currentUser.getPhotoUrl();
+        Uri displayImageUri = user.getPhotoUrl();
         TextView userName = findViewById(R.id.user_name);
         userName.setText(displayName);
         TextView userEmail = findViewById(R.id.user_email);
