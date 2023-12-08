@@ -21,7 +21,7 @@ public class Wishlist extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wishlist);
 
-        productWishlist=findViewById(R.id.productWishlist);
+        productWishlist=findViewById(R.id.productWishList);
 
         List<Products> wishlistItems=new ArrayList<Products>();
         wishlistItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));

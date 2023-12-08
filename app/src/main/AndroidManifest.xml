@@ -15,6 +15,9 @@
         <activity
             android:name=".InvalidDomain"
             android:exported="false" />
+      <activity
+            android:name=".delete_acc"
+            android:exported="false" />
         <activity
             android:name=".Changepass"
             android:exported="false" />
@@ -23,6 +26,12 @@
             android:exported="false" /> <!-- <meta-data -->
         <!-- android:name="com.google.android.actions" -->
         <!-- android:resource="@xml/bottom_profile" /> -->
+        <activity
+            android:name=".ProfilePage"
+            android:exported="false" />
+        <activity
+            android:name=".OrderHistory"
+            android:exported="false" />
         <activity
             android:name=".FeedbackSupport"
             android:exported="false" />
