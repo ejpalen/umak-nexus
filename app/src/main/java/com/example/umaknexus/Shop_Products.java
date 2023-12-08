@@ -63,7 +63,7 @@ public class Shop_Products extends AppCompatActivity {
                 finish();
                 return true;
             } else if (item.getItemId() == R.id.bottom_profile) {
-                startActivity(new Intent(getApplicationContext(), Home.class));
+                startActivity(new Intent(getApplicationContext(), ProfilePage.class));
                 finish();
                 return true;
             }

@@ -9,18 +9,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/border_background"
         android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="40dp"
-        tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="1dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/border_background"
+            android:gravity="center"
             android:orientation="horizontal"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
@@ -31,12 +33,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.9"
-                android:fontFamily="@font/syne"
+                android:fontFamily="@font/syne_bold"
                 android:gravity="left|center_vertical"
                 android:paddingLeft="15dp"
                 android:text="Order #521144"
                 android:textColor="#000000"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -46,15 +48,19 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_weight="0.1"
+                android:fontFamily="@font/syne"
                 android:paddingRight="15dp"
                 android:text="Completed"
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="-2dp"
             android:background="@drawable/border_background"
+            android:gravity="center"
             android:orientation="horizontal"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
@@ -65,7 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.9"
-                android:fontFamily="@font/syne"
+                android:fontFamily="@font/syne_bold"
                 android:gravity="left|center_vertical"
                 android:paddingLeft="15dp"
                 android:text="1X UNIFORM (XL)"
@@ -80,15 +86,19 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_weight="0.1"
+                android:fontFamily="@font/syne"
                 android:paddingRight="15dp"
                 android:text="₱ 300.00"
-                android:textAlignment="textEnd" />
+                android:textAlignment="textEnd"
+                android:textColor="@color/black" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="-2dp"
             android:background="@drawable/border_background"
+            android:gravity="center"
             android:orientation="horizontal"
             android:paddingTop="15dp"
             android:paddingBottom="15dp"
@@ -98,10 +108,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.9"
-                android:fontFamily="@font/syne"
+                android:fontFamily="@font/syne_bold"
                 android:gravity="left|center_vertical"
-                android:paddingLeft="15dp"
-                android:text="Total" />
+                android:paddingLeft="14sp"
+                android:text="Total"
+                android:textColor="@color/black" />
 
             <TextView
                 android:id="@+id/total_price"
@@ -110,6 +121,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
                 android:layout_weight="0.1"
+                android:fontFamily="@font/syne"
                 android:paddingRight="15dp"
                 android:text="₱ 300.00"
                 android:textAlignment="textEnd"

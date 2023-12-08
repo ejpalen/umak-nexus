@@ -13,6 +13,13 @@ public class Order_Confirmation extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_orderconfirmation);
 
-
+        Button close = findViewById(R.id.btn_close);
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), Home.class));
+                finish();
+            }
+        });
     }
 }
