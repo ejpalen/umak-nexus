@@ -13,6 +13,9 @@
         android:theme="@style/Theme.UMakNexus"
         tools:targetApi="34">
         <activity
+            android:name=".InvalidDomain"
+            android:exported="false" />
+      <activity
             android:name=".delete_acc"
             android:exported="false" />
         <activity
@@ -51,6 +54,12 @@
             android:exported="false" />
         <activity
             android:name=".Notifications"
+            android:exported="false" />
+        <activity
+            android:name=".Order_Confirmation"
+            android:exported="false" />
+        <activity
+            android:name=".SearchPage"
             android:exported="false" />
         <activity
             android:name=".Wishlist"

@@ -10,9 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -20,9 +21,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             android:gravity="center"
             android:orientation="horizontal"
-            android:layout_marginBottom="20dp"
             app:layout_constraintStart_toStartOf="parent">
 
             <RelativeLayout
@@ -52,9 +53,9 @@
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@id/searchIcon"
                     android:background="@color/secondary_color"
+                    android:focusable="true"
                     android:fontFamily="@font/syne"
-                    android:hint="Search"
-                    android:focusable="true"/>
+                    android:hint="Search" />
             </RelativeLayout>
 
             <TextView
@@ -71,8 +72,8 @@
             android:id="@+id/shopProductRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="110dp"/>
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

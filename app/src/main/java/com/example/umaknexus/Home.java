@@ -1,10 +1,13 @@
 package com.example.umaknexus;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -31,7 +34,10 @@ public class Home extends AppCompatActivity {
     FirebaseUser user;
     FirebaseFirestore database;
     List<Categories>  categoryItems;
+    RelativeLayout searchBar;
     private CategoryAdapter categoryAdapter;
+    private ProgressDialog progressDialog;
+
 
     @Override
     public void onStart() {
@@ -62,9 +68,6 @@ public class Home extends AppCompatActivity {
 
         database = FirebaseFirestore.getInstance();
 
-        EditText searchEditText = findViewById(R.id.searchEditText);
-        searchEditText.clearFocus();
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
 
         bottomNavigationView.setSelectedItemId(R.id.bottom_home);
@@ -92,10 +95,24 @@ public class Home extends AppCompatActivity {
             return false;
         });
 
+        searchBar = findViewById(R.id.search_bar);
+
+        searchBar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Home.this, SearchPage.class);
+                intent.putExtra("activity", "Home");
+                startActivity(intent);
+            }
+        });
+
         RecyclerView category_RecyclerView = findViewById(R.id.categoryRecyclerView);
 
         categoryItems = new ArrayList<>();
         categoryAdapter = new CategoryAdapter(getApplicationContext(), categoryItems);
+        categoryItems.add(new Categories("All", "https://firebasestorage.googleapis.com/v0/b/umak-nexus-53bf2.appspot.com/o/categoryImages%2Fall_icon.png?alt=media&token=079787e2-b46a-48e9-b9b7-0de4d33ddd0b"));
+        categoryItems.add(new Categories("Bestsellers", "https://firebasestorage.googleapis.com/v0/b/umak-nexus-53bf2.appspot.com/o/categoryImages%2Fbestsellers_icon.png?alt=media&token=b68027cf-d6a6-4c93-ab1e-709e5b3d6671"));
+        categoryItems.add(new Categories("Latest", "https://firebasestorage.googleapis.com/v0/b/umak-nexus-53bf2.appspot.com/o/categoryImages%2Flatest_icon.png?alt=media&token=fb75215a-8698-428c-a8aa-3ac144592e9a"));
 
         getCategoryItems();
 
@@ -128,7 +145,15 @@ public class Home extends AppCompatActivity {
         bestSellers_RecyclerView.setAdapter(new NewArrivals_Products_Adapter(getApplication(), productsItems));
     }
 
+    private void showProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Loading..."); // Set the message you want to display
+        progressDialog.setCancelable(false); // Set whether the dialog can be canceled by clicking outside of it
+        progressDialog.show();
+    }
+
     private void getCategoryItems(){
+        showProgressDialog();
         database.collection("categories")
                 .orderBy("Category_name", Query.Direction.ASCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -152,6 +177,7 @@ public class Home extends AppCompatActivity {
                                 }
                             }
                         }
+                        progressDialog.dismiss();
                         // Notify the adapter after adding items
                         categoryAdapter.notifyDataSetChanged();
 

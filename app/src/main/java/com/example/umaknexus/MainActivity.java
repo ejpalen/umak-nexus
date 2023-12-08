@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         getStartedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), delete_acc.class));
+                startActivity(new Intent(getApplicationContext(), Onboarding_Signin.class));
                 finish();
             }
         });
