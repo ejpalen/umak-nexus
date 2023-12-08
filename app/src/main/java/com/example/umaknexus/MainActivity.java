@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         user = auth.getCurrentUser();
 
         if(user != null){
-            Intent intent = new Intent(getApplicationContext(), Home.class);
+            Intent intent = new Intent(getApplicationContext(), Settings.class);
             startActivity(intent);
             finish();
         }
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         getStartedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), Onboarding_Signin.class));
+                startActivity(new Intent(getApplicationContext(), Settings.class));
                 finish();
             }
         });
