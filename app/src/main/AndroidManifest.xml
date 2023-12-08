@@ -13,7 +13,9 @@
         android:theme="@style/Theme.UMakNexus"
         tools:targetApi="34">
         <activity
-
+            android:name=".delete_acc"
+            android:exported="false" />
+        <activity
             android:name=".Changepass"
             android:exported="false" />
         <activity
@@ -29,8 +31,8 @@
             android:exported="false" />
         <activity
             android:name=".FeedbackSupport"
-                  android:exported="false" />
-      <activity
+            android:exported="false" />
+        <activity
             android:name=".Cart_Page"
             android:exported="false" />
         <activity
@@ -38,12 +40,12 @@
             android:exported="false" />
         <activity
             android:name=".Shop_Products"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".Home"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".Onboarding_Signin"
             android:exported="false" />

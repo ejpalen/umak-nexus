@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         user = auth.getCurrentUser();
 
         if(user != null){
-            Intent intent = new Intent(getApplicationContext(), OrderHistory.class);
+            Intent intent = new Intent(getApplicationContext(), delete_acc.class);
             startActivity(intent);
             finish();
         }
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         getStartedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), OrderHistory.class));
+                startActivity(new Intent(getApplicationContext(), delete_acc.class));
                 finish();
             }
         });
