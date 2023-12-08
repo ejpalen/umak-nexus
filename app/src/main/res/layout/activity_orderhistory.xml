@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
@@ -59,23 +60,21 @@
     </FrameLayout>
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="409dp"
+        android:layout_height="551dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backButtonFrame">
+        app:layout_constraintTop_toBottomOf="@+id/backButtonFrame"
+        tools:layout_editor_absoluteX="1dp">
 
         <TextView
-            android:id="@+id/lblWishlist"
+            android:id="@+id/lblWishlist2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:fontFamily="@font/syne_bold"
-            android:text="Wishlist"
+            android:text="Order History"
             android:textColor="@color/main_color"
             android:textSize="32sp" />
 
@@ -89,15 +88,14 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/productWishList"
+                    android:id="@+id/orderHistory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="20dp"
                     android:layout_marginBottom="20dp"
                     android:isScrollContainer="false"
                     android:nestedScrollingEnabled="false"
@@ -108,6 +106,5 @@
         </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

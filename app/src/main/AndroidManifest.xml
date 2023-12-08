@@ -22,6 +22,12 @@
         <!-- android:name="com.google.android.actions" -->
         <!-- android:resource="@xml/bottom_profile" /> -->
         <activity
+            android:name=".ProfilePage"
+            android:exported="false" />
+        <activity
+            android:name=".OrderHistory"
+            android:exported="false" />
+        <activity
             android:name=".FeedbackSupport"
                   android:exported="false" />
       <activity
