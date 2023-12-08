@@ -102,37 +102,48 @@ public class Onboarding_Signin extends AppCompatActivity {
         }
     }
 
-    private void firbaseAuth(String idToken){
-        AuthCredential credential  = GoogleAuthProvider.getCredential(idToken, null);
+    private void firbaseAuth(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         auth.signInWithCredential(credential)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        progressDialog.dismiss();
-                        if (task.isSuccessful()){
-                            FirebaseUser user = auth.getCurrentUser();
+                .addOnCompleteListener(this, task -> {
+                    progressDialog.dismiss();
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = auth.getCurrentUser();
 
+                        // Check if the user's email has the allowed domain
+                        String allowedDomain = "umak.edu.ph";
+                        String userEmail = user != null ? user.getEmail() : "";
+
+                        if (userEmail != null && userEmail.endsWith("@" + allowedDomain)) {
+                            // The email has the allowed domain
+                            // Continue with storing user data and navigating to the Home activity
                             HashMap<String, Object> map = new HashMap<>();
                             map.put("id", user.getUid());
                             map.put("name", user.getDisplayName());
-                            map.put("profile", user.getPhotoUrl().toString());
+                            map.put("profile", user.getPhotoUrl() != null ? user.getPhotoUrl().toString() : "");
+                            map.put("push_notifications", "on");
 
                             database.collection("users").document(user.getUid()).set(map)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            Toast.makeText(Onboarding_Signin.this, "Values Added", Toast.LENGTH_SHORT).show();
-                                        }
+                                    .addOnCompleteListener(task1 -> {
+                                        Toast.makeText(Onboarding_Signin.this, "Values Added", Toast.LENGTH_SHORT).show();
                                     });
 
                             Intent intent = new Intent(Onboarding_Signin.this, Home.class);
                             startActivity(intent);
                             finish();
+                        } else {
+                            auth.signOut();
+                            mGoogleSignInClient.signOut()
+                                    .addOnCompleteListener(this, signOutTask -> {
+                                        Intent intent = new Intent(Onboarding_Signin.this, InvalidDomain.class);
+                                        startActivity(intent);
+                                    });
                         }
-                        else{
-                            Toast.makeText(Onboarding_Signin.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-                        }
+                    } else {
+                        // Sign-in failed
+                        Toast.makeText(Onboarding_Signin.this, "Authentication failed", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
 }

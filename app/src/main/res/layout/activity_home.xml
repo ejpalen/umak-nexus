@@ -62,7 +62,7 @@
                     app:srcCompat="@drawable/search_icon" />
 
                 <!-- EditText for search input -->
-                <EditText
+                <TextView
                     android:id="@+id/searchEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -71,7 +71,8 @@
                     android:background="@color/secondary_color"
                     android:fontFamily="@font/syne"
                     android:hapticFeedbackEnabled="true"
-                    android:hint="Search" />
+                    android:hint="Search"
+                    android:textSize="18sp" />
             </RelativeLayout>
 
 

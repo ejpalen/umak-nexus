@@ -4,45 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_color">
+    android:background="@color/main_color"
+    tools:context=".Order_Confirmation">
 
 
     <TextView
         android:id="@+id/orderStatus"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="126dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="20dp"
         android:fontFamily="@font/syne_bold"
         android:text="is being processed"
+        android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="32sp"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/orderTitle" />
 
     <TextView
         android:id="@+id/orderTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="112dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="80dp"
+        android:layout_marginEnd="20dp"
         android:fontFamily="@font/syne_bold"
-        android:text="Order"
+        android:text="Order #52411"
+        android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="32sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/orderNum"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="200dp"
-        android:layout_marginTop="80dp"
-        android:fontFamily="@font/syne_bold"
-        android:text="#52411"
-        android:textColor="@color/white"
-        android:textSize="32sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,19 +45,21 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/bg_order"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/orderStatus">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
             android:orientation="horizontal">
@@ -72,6 +68,7 @@
                 android:id="@+id/nameTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="60dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/syne"
                 android:text="Name"
@@ -82,8 +79,6 @@
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="20dp"
                 android:fontFamily="@font/syne"
                 android:text="Ej Palen"
                 android:textColor="@color/black"
@@ -96,7 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="20dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -104,6 +99,7 @@
                 android:id="@+id/dateTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="60dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/syne"
                 android:text="Purchase Date"
@@ -114,8 +110,6 @@
                 android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="20dp"
                 android:fontFamily="@font/syne"
                 android:text="11/26/2023"
                 android:textColor="@color/black"
@@ -125,9 +119,10 @@
 
         <ImageView
             android:id="@+id/borderlineBottom"
-            android:layout_width="340dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginHorizontal="20dp"
             app:layout_constraintTop_toBottomOf="@+id/total"
             app:srcCompat="@drawable/borderline" />
 
@@ -135,8 +130,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -144,6 +139,7 @@
                 android:id="@+id/totalTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="60dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/syne"
                 android:text="Total"
@@ -154,8 +150,6 @@
                 android:id="@+id/total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="20dp"
                 android:fontFamily="@font/syne"
                 android:text="P132.00"
                 android:textColor="@color/black"
@@ -172,7 +166,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginStart="55dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="55dp"
         android:fontFamily="@font/syne"
         android:text="Please check your notifications for updates
@@ -189,16 +183,19 @@ regarding your order. Thank you!"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="592dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:layout_weight="1"
         android:background="@drawable/bg_close"
-        android:fontFamily="@font/syne"
+        android:fontFamily="@font/syne_bold"
         android:text="CLOSE"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="13sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="20dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

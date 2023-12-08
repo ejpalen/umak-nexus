@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.firestore.DocumentChange;
@@ -30,7 +32,7 @@ public class Shop_Products extends AppCompatActivity {
     FirebaseFirestore database;
 
     List<Categories>  categoryItems;
-    EditText searchEditText;
+    RelativeLayout searchEditText;
     private CategoryAdapter categoryAdapter;
     RecyclerView.LayoutManager layoutManager, shopProductLayoutManager;
     @Override
@@ -43,6 +45,8 @@ public class Shop_Products extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_shop);
+
+
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.bottom_home) {
                 startActivity(new Intent(getApplicationContext(), Home.class));
@@ -67,7 +71,7 @@ public class Shop_Products extends AppCompatActivity {
             return false;
         });
 
-        searchEditText= findViewById(R.id.searchEditText);
+        searchEditText= findViewById(R.id.searchRelativeLayout);
         RecyclerView category_RecyclerView = findViewById(R.id.categoryRecyclerView);
         shopProductrecyclerView=findViewById(R.id.shopProductRecyclerView);
 
@@ -99,7 +103,9 @@ public class Shop_Products extends AppCompatActivity {
         searchEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), SearchPage.class));
+                Intent intent = new Intent(Shop_Products.this, SearchPage.class);
+                intent.putExtra("activity", "Shop_Products");
+                startActivity(intent);
             }
         });
 

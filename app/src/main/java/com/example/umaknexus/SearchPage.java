@@ -24,6 +24,9 @@ public class SearchPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_page);
 
+        Intent intent = getIntent();
+        String activity = intent.getStringExtra("activity");
+
         cancel =findViewById(R.id.Cancel_Textview);
          searchEditText = findViewById(R.id.searchEditText);
         searchEditText= findViewById(R.id.searchEditText);
@@ -33,7 +36,12 @@ public class SearchPage extends AppCompatActivity {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), Shop_Products.class));
+                if(activity.equals("Shop_Products")){
+                    startActivity(new Intent(getApplicationContext(), Shop_Products.class));
+                }
+                else{
+                    startActivity(new Intent(getApplicationContext(), Home.class));
+                }
             }
         });
 

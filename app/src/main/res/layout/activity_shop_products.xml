@@ -28,6 +28,7 @@
             android:textSize="32sp" />
 
         <RelativeLayout
+            android:id="@+id/searchRelativeLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
@@ -47,7 +48,7 @@
                 app:srcCompat="@drawable/search_icon" />
 
             <!-- EditText for search input -->
-            <EditText
+            <TextView
                 android:id="@+id/searchEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -55,7 +56,9 @@
                 android:layout_toEndOf="@id/searchIcon"
                 android:background="@color/secondary_color"
                 android:fontFamily="@font/syne"
-                android:hint="Search" />
+                android:hint="Search"
+                android:inputType="none"
+                android:textSize="18sp" />
         </RelativeLayout>
 
 
