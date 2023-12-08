@@ -90,7 +90,7 @@
         android:layout_width="343dp"
         android:layout_height="53dp"
         android:layout_marginStart="34dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="43dp"
         android:layout_marginEnd="34dp"
         android:background="@drawable/white_bg_round_corners"
         android:backgroundTint="#0057FF"
@@ -99,7 +99,7 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextText2" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
@@ -136,19 +136,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="306dp"
-        android:layout_height="186dp"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="53dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5"
-        app:srcCompat="@drawable/bg_btn_item" />
-
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
@@ -183,5 +170,27 @@
             android:textSize="16sp" />
     </LinearLayout>
 
+    <EditText
+        android:id="@+id/editTextText2"
+        android:layout_width="340dp"
+        android:layout_height="175dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="43dp"
+        android:background="@drawable/bg_btn_item"
+        android:ems="10"
+        android:fontFamily="@font/syne"
+        android:gravity="top|left"
+        android:inputType="text"
+        android:paddingStart="10dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        android:text="Describe your experience here"
+        android:textColor="#808080"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
