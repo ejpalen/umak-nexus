@@ -1,5 +1,6 @@
 package com.example.umaknexus;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,5 +19,6 @@ public class ProductsViewHolder extends RecyclerView.ViewHolder {
         productsImageView= itemView.findViewById(R.id.Product_ImageView);
         productsTextView = itemView.findViewById(R.id.Product_Textview);
         productsPriceTextView = itemView.findViewById(R.id.ProductPrice_Textview);
+
     }
 }

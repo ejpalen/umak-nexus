@@ -87,7 +87,7 @@ public class Home extends AppCompatActivity {
                 finish();
                 return true;
             } else if (item.getItemId() == R.id.bottom_profile) {
-                startActivity(new Intent(getApplicationContext(), Home.class));
+                startActivity(new Intent(getApplicationContext(), ProfilePage.class));
                 finish();
                 return true;
             }
@@ -169,6 +169,7 @@ public class Home extends AppCompatActivity {
                             if (dc.getType() == DocumentChange.Type.ADDED) {
                                 String categoryName = dc.getDocument().getString("Category_name");
                                 String icon = dc.getDocument().getString("Icon");
+                                String id = dc.getDocument().getId();
 
                                 if (categoryName != null && icon != null) {
                                     categoryItems.add(new Categories(categoryName, icon));

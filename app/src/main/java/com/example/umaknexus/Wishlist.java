@@ -2,6 +2,8 @@ package com.example.umaknexus;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -61,6 +63,14 @@ public class Wishlist extends AppCompatActivity {
             }
 
             return false;
+        });
+
+        FrameLayout backBtn = findViewById(R.id.backButtonFrame);
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), ProfilePage.class));
+            }
         });
     }
 }

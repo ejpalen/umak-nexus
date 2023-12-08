@@ -30,6 +30,9 @@
             android:name=".ProfilePage"
             android:exported="false" />
         <activity
+            android:name=".Edit_Profile"
+            android:exported="false" />
+        <activity
             android:name=".OrderHistory"
             android:exported="false" />
         <activity

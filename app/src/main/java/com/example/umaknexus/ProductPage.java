@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -64,6 +65,16 @@ public class ProductPage extends AppCompatActivity {
 
             return false;
        });
+
+        FrameLayout back_btn = findViewById(R.id.backButtonFrame);
+
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), Shop_Products.class));
+                finish();
+            }
+        });
 
 
     }

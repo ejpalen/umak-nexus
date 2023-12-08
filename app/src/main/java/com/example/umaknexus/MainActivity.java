@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         user = auth.getCurrentUser();
 
         if(user != null){
-            Intent intent = new Intent(getApplicationContext(), delete_acc.class);
+            Intent intent = new Intent(getApplicationContext(), Home.class);
             startActivity(intent);
             finish();
         }

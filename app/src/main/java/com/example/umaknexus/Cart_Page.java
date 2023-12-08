@@ -4,6 +4,9 @@ import android.content.ClipData;
 import android.os.Bundle;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,7 +40,7 @@ public class Cart_Page extends AppCompatActivity {
                 finish();
                 return true;
             } else if (item.getItemId() == R.id.bottom_profile) {
-                startActivity(new Intent(getApplicationContext(), Home.class));
+                startActivity(new Intent(getApplicationContext(), ProfilePage.class));
                 finish();
                 return true;
             }
@@ -55,5 +58,13 @@ public class Cart_Page extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new CartAdapter(getApplicationContext(), items));
+
+        Button confirm = findViewById(R.id.btn_confirm);
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), Order_Confirmation.class));
+            }
+        });
     }
 }
