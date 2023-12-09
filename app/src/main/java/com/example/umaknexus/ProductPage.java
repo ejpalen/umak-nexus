@@ -41,17 +41,17 @@ public class ProductPage extends AppCompatActivity {
 //        }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
-        bottomNavigationView.setSelectedItemId(R.id.bottom_cart);
+        bottomNavigationView.setSelectedItemId(R.id.bottom_shop);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.bottom_home) {
                 startActivity(new Intent(getApplicationContext(), Home.class));
                 finish();
                 return true;
             } else if (item.getItemId() == R.id.bottom_shop) {
-                startActivity(new Intent(getApplicationContext(), Shop_Products.class));
-                finish();
                 return true;
             } else if (item.getItemId() == R.id.bottom_cart) {
+                startActivity(new Intent(getApplicationContext(), Cart_Page.class));
+                finish();
                 return true;
             } else if (item.getItemId() == R.id.bottom_notifications) {
                 startActivity(new Intent(getApplicationContext(), Notifications.class));
