@@ -78,12 +78,21 @@ public class Onboarding_Signin extends AppCompatActivity {
         });
 
     }
-    private void googleSignIn(){
+    private void googleSignIn() {
         progressDialog.show();
+
+        // Force account selection by creating a new GoogleSignInOptions
+        GoogleSignInOptions signInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .setHostedDomain("umak.edu.ph") // Specify your hosted domain
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, signInOptions);
+
         Intent intent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(intent, RC_SIGN_IN);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
