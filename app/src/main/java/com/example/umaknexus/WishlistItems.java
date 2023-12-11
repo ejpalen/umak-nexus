@@ -1,27 +1,25 @@
 package com.example.umaknexus;
 
 public class WishlistItems {
-    String notifTitle;
-    String notifDesc;
+    String wishlistProduct;
+    String wishlistPrice;
+    int productImage;
 
-    public WishlistItems(String notifTitle, String notifDesc) {
-        this.notifTitle = notifTitle;
-        this.notifDesc = notifDesc;
+    public WishlistItems(String wishlistProduct, String wishlistPrice, int productImage) {
+        this.wishlistProduct = wishlistProduct;
+        this.wishlistPrice = wishlistPrice;
+        this.productImage = productImage;
     }
 
-    public String getNotifTitle() {
-        return notifTitle;
-    }
+    public String getWishlistProduct() { return wishlistProduct; }
 
-    public void setNotifTitle(String notifTitle) {
-        this.notifTitle = notifTitle;
-    }
+    public void setWishlistProduct(String wishlistProduct) { this.wishlistProduct = wishlistProduct; }
 
-    public String getNotifDesc() {
-        return notifDesc;
-    }
+    public String getWishlistPrice() { return wishlistPrice; }
 
-    public void setNotifDesc(String notifDesc) {
-        this.notifDesc = notifDesc;
-    }
+    public void setWishlistPrice(String wishlistPrice) { this.wishlistPrice = wishlistPrice; }
+
+    public int getProductImage() { return productImage; }
+
+    public void setProductImage(int productImage) { this.productImage = productImage; }
 }
