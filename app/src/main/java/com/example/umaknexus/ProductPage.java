@@ -6,13 +6,28 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.w3c.dom.Text;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProductPage extends AppCompatActivity {
     Button btn_s, btn_m, btn_l, btn_addtocart, btn_addtowishlist;
+    FirebaseFirestore db;
+    FirebaseAuth auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,7 +36,10 @@ public class ProductPage extends AppCompatActivity {
 //        public void onSizeButtonClick(View view){
 ////            Reset background color for all buttons
 //            Button btn_addtocart = findViewById(R.id.btn_addtocart);
-//            Button btn_addtowishlist = findViewById(R.id.btn_addtowishlist);
+            Button btn_addtowishlist = findViewById(R.id.edit_profile);
+            db = FirebaseFirestore.getInstance();
+            auth = FirebaseAuth.getInstance();
+
 //
 //            btn_addtocart.setSelected(R.id.btn_addtocart);
 //            btn_addtowishlist.setSelected(R.id.btn_addtowishlist);
@@ -70,6 +88,42 @@ public class ProductPage extends AppCompatActivity {
             }
         });
 
+        btn_addtowishlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextView productName = findViewById(R.id.prodName);
+                TextView productQty = findViewById(R.id.qty_item);
+                TextView productPrice = findViewById(R.id.price);
+
+                String product = productName.getText().toString();
+                int quantity = Integer.parseInt(productQty.getText().toString());
+                String price = productPrice.getText().toString();
+
+                Map<String, Object> wishlistData = new HashMap<>();
+                wishlistData.put("product_name", product);
+                wishlistData.put("product_quantity", quantity);
+                wishlistData.put("product_subtotal", price);
+//                wishlistData.put("user", auth.getCurrentUser().getUid());
+
+                Map<String, Object> wishlistProducts = new HashMap<>();
+                wishlistProducts.put("products", wishlistData);
+
+                db.collection("wishlist").add(wishlistProducts).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Toast.makeText(getApplicationContext(), "Product added to wishlist.", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "Error adding data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                startActivity(new Intent(getApplicationContext(), Shop_Products.class));
+                finish();
+            }
+        });
 
     }
 }

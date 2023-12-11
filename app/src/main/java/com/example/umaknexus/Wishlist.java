@@ -2,14 +2,20 @@ package com.example.umaknexus;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import androidx.annotation.DrawableRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,27 +23,40 @@ import java.util.List;
 public class Wishlist extends AppCompatActivity {
 
     RecyclerView productWishlist;
-    RecyclerView.LayoutManager wishlistProductLayoutManager;
+    FirebaseFirestore db;
+    CollectionReference wishlistRef;
+    FrameLayout backBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wishlist);
 
         productWishlist=findViewById(R.id.productWishList);
+        db = FirebaseFirestore.getInstance();
+        wishlistRef = db.collection("wishlist");
 
-        List<Products> wishlistItems=new ArrayList<Products>();
-        wishlistItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-        wishlistItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-        wishlistItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-        wishlistItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-        wishlistItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-        wishlistItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-        wishlistItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-        wishlistItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
+        wishlistRef.get().addOnSuccessListener(queryDocumentSnapshots -> {
+            List<WishlistItems> items = new ArrayList<>();
 
-        wishlistProductLayoutManager = new GridLayoutManager(this, 2);
-        productWishlist.setLayoutManager(wishlistProductLayoutManager);
-        productWishlist.setAdapter(new shopProductsAdapter(getApplication(), wishlistItems));
+            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                String product_name = documentSnapshot.get("products.product_name").toString();
+                String product_subtotal = documentSnapshot.get("products.product_subtotal").toString();
+
+                WishlistItems wishlistItem = new WishlistItems(product_name, product_subtotal, R.drawable.unif_sample);
+                items.add(wishlistItem);
+            }
+
+            productWishlist.setAdapter(new WishlistAdapter(getApplicationContext(), items));
+        });
+
+//        List<WishlistItems> items = new ArrayList<>();
+//
+//        items.add(new WishlistItems("UNIFORM (Female)", "P300.00", R.drawable.unif_sample));
+//        items.add(new WishlistItems("UNIFORM (Female)", "P300.00", R.drawable.unif_sample));
+//        items.add(new WishlistItems("UNIFORM (Female)", "P300.00", R.drawable.unif_sample));
+//
+//        productWishlist.setAdapter(new WishlistAdapter(getApplicationContext(), items));
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_profile);
@@ -65,7 +84,7 @@ public class Wishlist extends AppCompatActivity {
             return false;
         });
 
-        FrameLayout backBtn = findViewById(R.id.backButtonFrame);
+        backBtn = findViewById(R.id.backButtonFrame);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
