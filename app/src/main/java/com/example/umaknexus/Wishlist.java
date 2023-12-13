@@ -1,5 +1,6 @@
 package com.example.umaknexus;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.annotation.DrawableRes;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,8 +18,12 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +36,8 @@ public class Wishlist extends AppCompatActivity {
     FirebaseUser user;
     CollectionReference wishlistRef;
     FrameLayout backBtn;
+    List<WishlistItems> items;
+    private WishlistAdapter wishlistAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,28 +47,30 @@ public class Wishlist extends AppCompatActivity {
         productWishlist=findViewById(R.id.productWishList);
         db = FirebaseFirestore.getInstance();
         wishlistRef = db.collection("wishlist");
-
+        
+        getProductImage();
+        
         // Initialize FirebaseAuth
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
         String userId = user.getUid();
 
-        wishlistRef.get().addOnSuccessListener(queryDocumentSnapshots -> {
-            List<WishlistItems> items = new ArrayList<>();
-
-            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                String product_name = documentSnapshot.get("products.product_name").toString();
-                String product_subtotal = documentSnapshot.get("products.product_subtotal").toString();
-                String product_image = documentSnapshot.get("products.product_image").toString();
-                int product_imageID = getResources().getIdentifier(product_image, "drawable", getPackageName());
-
-                WishlistItems wishlistItem = new WishlistItems(product_name, product_subtotal, product_imageID);
-                items.add(wishlistItem);
-            }
-
-            productWishlist.setAdapter(new WishlistAdapter(getApplicationContext(), items));
-        });
+//        wishlistRef.get().addOnSuccessListener(queryDocumentSnapshots -> {
+//            items = new ArrayList<>();
+//
+//            for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+//                String product_name = documentSnapshot.get("products.product_name").toString();
+//                String product_subtotal = documentSnapshot.get("products.product_subtotal").toString();
+//                String product_image = documentSnapshot.get("products.product_image").toString();
+//                int product_imageID = getResources().getIdentifier(product_image, "drawable", getPackageName());
+//
+//                WishlistItems wishlistItem = new WishlistItems(product_name, product_subtotal, product_imageID);
+//                items.add(wishlistItem);
+//            }
+//
+//            productWishlist.setAdapter(new WishlistAdapter(getApplicationContext(), items));
+//        });
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_profile);
@@ -95,5 +105,37 @@ public class Wishlist extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), ProfilePage.class));
             }
         });
+    }
+
+    private void getProductImage() {
+        db.collection("wishlist")
+
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @SuppressLint("NotifyDataSetChanged")
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.e("Firestore error: ", error.getMessage());
+                            return; // Stop processing if there's an error
+                        }
+
+                        for (DocumentChange dc : value.getDocumentChanges()) {
+                            if (dc.getType() == DocumentChange.Type.ADDED) {
+                                String image = dc.getDocument().getString("product_image" );
+                                String name = dc.getDocument().getString("product_name");
+                                String price = dc.getDocument().getString("product_price");
+
+                                if (name != null && price != null ) {
+                                    items.add(new WishlistItems(name, price, image));
+                                } else {
+                                    Log.e("Firestore error: ", "One or more fields are null.");
+                                }
+                            }
+                        }
+                        // Notify the adapter after adding items
+                        wishlistAdapter.notifyDataSetChanged();
+
+                    }
+                });
     }
 }

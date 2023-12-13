@@ -42,7 +42,7 @@ public class ProductPage extends AppCompatActivity {
         setContentView(R.layout.activity_productpage);
 
         TextView productName = findViewById(R.id.prodName);
-        TextView productQty = findViewById(R.id.qty_item);
+        productQtyTextView = findViewById(R.id.qty_item);
         TextView productPrice = findViewById(R.id.price);
         Button addQty = findViewById(R.id.btn_add);
         Button subtractQty = findViewById(R.id.btn_subtract);
@@ -52,7 +52,7 @@ public class ProductPage extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         // Set initial quantity in TextView
-        productQty.setText(String.valueOf(productQty));
+        productQtyTextView.setText(String.valueOf(productQty));
 
         // Set click listeners for add and subtract buttons
         addQty.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +129,7 @@ public class ProductPage extends AppCompatActivity {
                 TextView productPrice = findViewById(R.id.price);
 
                 String product = productName.getText().toString();
-                int quantity = 1;
+                int quantity = Integer.parseInt(productQty.getText().toString());
                 String price = productPrice.getText().toString();
 
                 Map<String, Object> cartData = new HashMap<>();
@@ -154,6 +154,7 @@ public class ProductPage extends AppCompatActivity {
                 });
             }
         });
+
         btnAddtowishlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -188,9 +189,6 @@ public class ProductPage extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Error adding data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-
-                startActivity(new Intent(getApplicationContext(), Shop_Products.class));
-                finish();
             }
         });
     }

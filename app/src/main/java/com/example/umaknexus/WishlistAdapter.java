@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 
@@ -31,7 +33,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistViewHolder> {
     public void onBindViewHolder(@NonNull WishlistViewHolder holder, int position) {
         holder.wishlistProduct.setText(items.get(position).getWishlistProduct());
         holder.wishlistPrice.setText(items.get(position).getWishlistPrice());
-        holder.productImage.setImageResource(items.get(position).getProductImage());
+        Glide.with(context).load(items.get(position).getProductImage()).into(holder.productImage);
     }
 
     @Override
