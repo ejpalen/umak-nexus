@@ -29,25 +29,24 @@ import java.util.List;
 public class Shop_Products extends AppCompatActivity {
 
     private RecyclerView shopProductrecyclerView;
-    FirebaseFirestore database;
+    private FirebaseFirestore database;
 
-    List<Categories>  categoryItems;
-    List<Products> productsItems;
-    RelativeLayout searchEditText;
+    private List<Categories> categoryItems;
+    private List<Products> productsItems;
     private CategoryAdapter categoryAdapter;
     private shopProductsAdapter productsAdapter;
-    RecyclerView.LayoutManager layoutManager, shopProductLayoutManager;
+
+    private RelativeLayout searchEditText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_products);
 
-
         database = FirebaseFirestore.getInstance();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_shop);
-
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.bottom_home) {
@@ -73,9 +72,9 @@ public class Shop_Products extends AppCompatActivity {
             return false;
         });
 
-        searchEditText= findViewById(R.id.searchRelativeLayout);
+        searchEditText = findViewById(R.id.searchRelativeLayout);
         RecyclerView category_RecyclerView = findViewById(R.id.categoryRecyclerView);
-        shopProductrecyclerView=findViewById(R.id.shopProductRecyclerView);
+        shopProductrecyclerView = findViewById(R.id.shopProductRecyclerView);
 
         categoryItems = new ArrayList<>();
         categoryAdapter = new CategoryAdapter(getApplicationContext(), categoryItems);
@@ -83,102 +82,74 @@ public class Shop_Products extends AppCompatActivity {
         getCategoryItems();
         getproductsItems();
 
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         category_RecyclerView.setLayoutManager(layoutManager);
-        category_RecyclerView.setAdapter(new CategoryAdapter(getApplicationContext(), categoryItems));
+        category_RecyclerView.setAdapter(categoryAdapter);
 
-        productsItems=new ArrayList<>();
+        productsItems = new ArrayList<>();
         productsAdapter = new shopProductsAdapter(getApplicationContext(), productsItems);
-        //productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-       // productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-        //productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-        //productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-//        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-//        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-//        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-//        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
 
-        shopProductLayoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager shopProductLayoutManager = new GridLayoutManager(this, 2);
         shopProductrecyclerView.setLayoutManager(shopProductLayoutManager);
-        shopProductrecyclerView.setAdapter(new shopProductsAdapter(getApplication(), productsItems));
+        shopProductrecyclerView.setAdapter(productsAdapter);
 
-
-        searchEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Shop_Products.this, SearchPage.class);
-                intent.putExtra("activity", "Shop_Products");
-                startActivity(intent);
-            }
+        searchEditText.setOnClickListener(view -> {
+            Intent intent = new Intent(Shop_Products.this, SearchPage.class);
+            intent.putExtra("activity", "Shop_Products");
+            startActivity(intent);
         });
-
     }
 
-    private void getCategoryItems(){
+    private void getCategoryItems() {
         database.collection("categories")
                 .orderBy("Category_name", Query.Direction.ASCENDING)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @SuppressLint("NotifyDataSetChanged")
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if (error != null) {
-                            Log.e("Firestore error: ", error.getMessage());
-                            return; // Stop processing if there's an error
-                        }
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        Log.e("Firestore error: ", error.getMessage());
+                        return;
+                    }
 
-                        for (DocumentChange dc : value.getDocumentChanges()) {
-                            if (dc.getType() == DocumentChange.Type.ADDED) {
-                                String categoryName = dc.getDocument().getString("Category_name");
-                                String icon = dc.getDocument().getString("Icon");
+                    categoryItems.clear(); // Clear existing items
+                    for (DocumentChange dc : value.getDocumentChanges()) {
+                        if (dc.getType() == DocumentChange.Type.ADDED) {
+                            String categoryName = dc.getDocument().getString("Category_name");
+                            String icon = dc.getDocument().getString("Icon");
 
-                                if (categoryName != null && icon != null) {
-                                    categoryItems.add(new Categories(categoryName, icon));
-                                } else {
-                                    Log.e("Firestore error: ", "One or more fields are null.");
-                                }
+                            if (categoryName != null && icon != null) {
+                                categoryItems.add(new Categories(categoryName, icon));
+                            } else {
+                                Log.e("Firestore error: ", "One or more fields are null.");
                             }
                         }
-                        // Notify the adapter after adding items
-                        categoryAdapter.notifyDataSetChanged();
-
                     }
+                    categoryAdapter.notifyDataSetChanged();
                 });
     }
 
-    private void getproductsItems(){
+    private void getproductsItems() {
         database.collection("products")
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        Log.e("Firestore error: ", error.getMessage());
+                        return;
+                    }
 
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @SuppressLint("NotifyDataSetChanged")
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if (error != null) {
-                            Log.e("Firestore error: ", error.getMessage());
-                            return; // Stop processing if there's an error
-                        }
+                    productsItems.clear(); // Clear existing items
+                    for (DocumentChange dc : value.getDocumentChanges()) {
+                        if (dc.getType() == DocumentChange.Type.ADDED) {
+                            String image = dc.getDocument().getString("Image");
+                            String productName = dc.getDocument().getString("product_name");
+                            String productPrice = dc.getDocument().getString("product_price");
+                            String productID = dc.getDocument().getId();
 
-                        for (DocumentChange dc : value.getDocumentChanges()) {
-                            if (dc.getType() == DocumentChange.Type.ADDED) {
-                                String image = dc.getDocument().getString("Image" );
-
-                                String productName = dc.getDocument().getString("product_name");
-                                String productPrice = dc.getDocument().getString("product_price");
-
-                                String productID = dc.getDocument().getId();
-
-
-                                if (productName != null && productPrice != null ) {
-                                    productsItems.add(new Products(productName, productPrice, image, productID));
-                                } else {
-                                    Log.e("Firestore error: ", "One or more fields are null.");
-                                }
+                            if (productName != null && productPrice != null) {
+                                productsItems.add(new Products(productName, productPrice, image, productID));
+                            } else {
+                                Log.e("Firestore error: ", "One or more fields are null.");
                             }
                         }
-                        // Notify the adapter after adding items
-                        productsAdapter.notifyDataSetChanged();
-
                     }
+                    productsAdapter.notifyDataSetChanged();
                 });
     }
 }
