@@ -2,6 +2,7 @@ package com.example.umaknexus;
 
 import android.os.Bundle;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -12,13 +13,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +32,7 @@ public class ProductPage extends AppCompatActivity {
     FirebaseFirestore db;
     FirebaseAuth auth;
     FirebaseUser user;
+
     private TextView productQtyTextView;
     private int productQty = 1;
     @Override
@@ -34,16 +40,63 @@ public class ProductPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_productpage);
 
-        TextView productName = findViewById(R.id.prodName);
+        TextView productNameTextView = findViewById(R.id.prodName);
+        TextView productCategoryTextView = findViewById(R.id.category);
         productQtyTextView = findViewById(R.id.qty_item);
-        TextView productPrice = findViewById(R.id.price);
+        TextView productPriceTextView = findViewById(R.id.price);
         Button addQty = findViewById(R.id.btn_add);
-        Button subtractQty = findViewById(R.id.btn_subtract);
+        Button subtractQty= findViewById(R.id.btn_subtract);
         Button btn_addtocart = findViewById(R.id.btn_addtocart);
         Button btnAddtowishlist = findViewById(R.id.btnAddtowishlist);
+        ImageView productImageView = findViewById(R.id.img_product);
+
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
+
+        Intent intent = getIntent();
+        String productID = intent.getStringExtra("productID");
+
+        if (productID != null) {
+            CollectionReference productsRef = db.collection("products");
+
+            // Query to get the document where the "id" field matches the product ID
+            productsRef.whereEqualTo(FieldPath.documentId(), productID)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                // Retrieve the document ID
+                                String documentId = document.getId();
+
+                                // Retrieve other data from the document
+
+                                String imageUrl = document.getString("Image");
+                                String productCat = document.getString("category");
+                                String productName = document.getString("product_name");
+//                                double productPrice = document.getDouble("product_price");
+                                String productPrice = document.getString("product_price");
+
+                                productCategoryTextView.setText(productCat);
+                                productNameTextView.setText(productName);
+                                productPriceTextView.setText(productPrice);
+
+                                // Load the image into CircularImageView using Glide or another library
+                                Glide.with(this).load(imageUrl).into(productImageView);
+
+                                // Use the document ID as needed
+                                Log.d("Document ID", documentId);
+                            }
+                        } else {
+                            // Handle errors
+                            Toast.makeText(ProductPage.this, "Error getting documents: " + task.getException(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            // Handle the case where productID is null
+            Toast.makeText(ProductPage.this, "Product ID is null", Toast.LENGTH_SHORT).show();
+        }
+
 
         // Set initial quantity in TextView
         productQtyTextView.setText(String.valueOf(productQty));
@@ -104,7 +157,7 @@ public class ProductPage extends AppCompatActivity {
                 TextView productName = findViewById(R.id.prodName);
                 TextView productQty = findViewById(R.id.qty_item);
                 TextView productPrice = findViewById(R.id.price);
-                ImageView productImage = findViewById(R.id.img_product);
+                ImageView imgProduct = findViewById(R.id.img_product);
 
                 String userID = user.getUid();
                 String product = productName.getText().toString();

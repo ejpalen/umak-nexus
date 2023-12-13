@@ -152,4 +152,5 @@ public class Shop_Products extends AppCompatActivity {
                     productsAdapter.notifyDataSetChanged();
                 });
     }
+
 }
