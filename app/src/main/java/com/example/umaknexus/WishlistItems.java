@@ -3,9 +3,9 @@ package com.example.umaknexus;
 public class WishlistItems {
     String wishlistProduct;
     String wishlistPrice;
-    int productImage;
+    String productImage;
 
-    public WishlistItems(String wishlistProduct, String wishlistPrice, int productImage) {
+    public WishlistItems(String wishlistProduct, String wishlistPrice, String productImage) {
         this.wishlistProduct = wishlistProduct;
         this.wishlistPrice = wishlistPrice;
         this.productImage = productImage;
@@ -19,7 +19,7 @@ public class WishlistItems {
 
     public void setWishlistPrice(String wishlistPrice) { this.wishlistPrice = wishlistPrice; }
 
-    public int getProductImage() { return productImage; }
+    public String getProductImage() { return productImage; }
 
-    public void setProductImage(int productImage) { this.productImage = productImage; }
+    public void setProductImage(String productImage) { this.productImage = productImage; }
 }
