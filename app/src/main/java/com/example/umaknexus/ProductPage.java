@@ -47,12 +47,12 @@ public class ProductPage extends AppCompatActivity {
         Button addQty = findViewById(R.id.btn_add);
         Button subtractQty = findViewById(R.id.btn_subtract);
         Button btn_addtocart = findViewById(R.id.btn_addtocart);
-        Button btn_addtowishlist = findViewById(R.id.btn_addtowishlist);
+        Button btnAddtowishlist = findViewById(R.id.btnAddtowishlist);
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
         // Set initial quantity in TextView
-        productQtyTextView.setText(String.valueOf(productQty));
+        productQty.setText(String.valueOf(productQty));
 
         // Set click listeners for add and subtract buttons
         addQty.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +71,7 @@ public class ProductPage extends AppCompatActivity {
 //        public void onSizeButtonClick(View view){
 ////            Reset background color for all buttons
 //            Button btn_addtocart = findViewById(R.id.btn_addtocart);
-            btn_addtowishlist = findViewById(R.id.edit_profile);
+//            btn_addtowishlist = findViewById(R.id.edit_profile);
             db = FirebaseFirestore.getInstance();
 
 //
@@ -129,7 +129,7 @@ public class ProductPage extends AppCompatActivity {
                 TextView productPrice = findViewById(R.id.price);
 
                 String product = productName.getText().toString();
-                int quantity = Integer.parseInt(productQty.getText().toString());
+                int quantity = 1;
                 String price = productPrice.getText().toString();
 
                 Map<String, Object> cartData = new HashMap<>();
@@ -154,7 +154,7 @@ public class ProductPage extends AppCompatActivity {
                 });
             }
         });
-        btn_addtowishlist.setOnClickListener(new View.OnClickListener() {
+        btnAddtowishlist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 TextView productName = findViewById(R.id.prodName);

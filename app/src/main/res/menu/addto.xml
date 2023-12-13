@@ -5,7 +5,7 @@
         android:title="Add to Cart"/>
 
     <item
-        android:id="@+id/btn_addtowishlist"
+        android:id="@+id/btnAddtowishlist"
         android:title="Add to Wishlist"/>
 
 </menu>
