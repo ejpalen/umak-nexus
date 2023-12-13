@@ -32,8 +32,10 @@ public class Shop_Products extends AppCompatActivity {
     FirebaseFirestore database;
 
     List<Categories>  categoryItems;
+    List<Products> productsItems;
     RelativeLayout searchEditText;
     private CategoryAdapter categoryAdapter;
+    private shopProductsAdapter productsAdapter;
     RecyclerView.LayoutManager layoutManager, shopProductLayoutManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,21 +81,23 @@ public class Shop_Products extends AppCompatActivity {
         categoryAdapter = new CategoryAdapter(getApplicationContext(), categoryItems);
 
         getCategoryItems();
+        getproductsItems();
 
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         category_RecyclerView.setLayoutManager(layoutManager);
         category_RecyclerView.setAdapter(new CategoryAdapter(getApplicationContext(), categoryItems));
 
-        List<Products> productsItems=new ArrayList<Products>();
-        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
+        productsItems=new ArrayList<>();
+        productsAdapter = new shopProductsAdapter(getApplicationContext(), productsItems);
+        //productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
+       // productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
+        //productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
+        //productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
+//        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
+//        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
+//        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
+//        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
 
         shopProductLayoutManager = new GridLayoutManager(this, 2);
         shopProductrecyclerView.setLayoutManager(shopProductLayoutManager);
@@ -110,6 +114,7 @@ public class Shop_Products extends AppCompatActivity {
         });
 
     }
+
     private void getCategoryItems(){
         database.collection("categories")
                 .orderBy("Category_name", Query.Direction.ASCENDING)
@@ -136,6 +141,42 @@ public class Shop_Products extends AppCompatActivity {
                         }
                         // Notify the adapter after adding items
                         categoryAdapter.notifyDataSetChanged();
+
+                    }
+                });
+    }
+
+    private void getproductsItems(){
+        database.collection("products")
+
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @SuppressLint("NotifyDataSetChanged")
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.e("Firestore error: ", error.getMessage());
+                            return; // Stop processing if there's an error
+                        }
+
+                        for (DocumentChange dc : value.getDocumentChanges()) {
+                            if (dc.getType() == DocumentChange.Type.ADDED) {
+                                String image = dc.getDocument().getString("Image" );
+
+                                String productName = dc.getDocument().getString("product_name");
+                                String productPrice = dc.getDocument().getString("product_price");
+
+                                String productID = dc.getDocument().getId();
+
+
+                                if (productName != null && productPrice != null ) {
+                                    productsItems.add(new Products(productName, productPrice, image, productID));
+                                } else {
+                                    Log.e("Firestore error: ", "One or more fields are null.");
+                                }
+                            }
+                        }
+                        // Notify the adapter after adding items
+                        productsAdapter.notifyDataSetChanged();
 
                     }
                 });
