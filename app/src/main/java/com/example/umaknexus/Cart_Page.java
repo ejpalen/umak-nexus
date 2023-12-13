@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -93,15 +94,19 @@ public class Cart_Page extends AppCompatActivity {
                 TextView productName = findViewById(R.id.prodName);
                 TextView productQty = findViewById(R.id.qty_item);
                 TextView productPrice = findViewById(R.id.price);
+                ImageView productImage = findViewById(R.id.imageView);
 
                 String product = productName.getText().toString();
                 int quantity = Integer.parseInt(productQty.getText().toString());
                 String price = productPrice.getText().toString();
+                int imageViewId = productImage.getId();
+                String image = getResources().getResourceEntryName(imageViewId);
 
                 Map<String, Object> orderData = new HashMap<>();
                 orderData.put("product_name", product);
                 orderData.put("product_quantity", quantity);
                 orderData.put("product_subtotal", price);
+                orderData.put("product_image", image);
 
                 Map<String, Object> orderProducts = new HashMap<>();
                 orderProducts.put("products", orderData);

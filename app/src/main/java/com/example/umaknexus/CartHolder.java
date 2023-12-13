@@ -11,19 +11,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.text.BreakIterator;
 
 public class CartHolder extends RecyclerView.ViewHolder {
-//    TextView qty_item;
     ImageView img_product, delete_btn;
     TextView prodName, prodPrice;
     TextView productQtyTextView;
     private int productQty = 1;
-
     private Button addQty;
     private Button subtractQty;
 
     public CartHolder(@NonNull View itemView) {
         super(itemView);
-
-        // Find TextView and Button elements in your layout
 
         img_product = itemView.findViewById(R.id.img_product);
         delete_btn = itemView.findViewById(R.id.delete_btn);
