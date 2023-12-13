@@ -1,10 +1,7 @@
 package com.example.umaknexus;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -15,18 +12,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.WriteBatch;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +26,7 @@ import java.util.Map;
 public class ProductPage extends AppCompatActivity {
     FirebaseFirestore db;
     FirebaseAuth auth;
+    FirebaseUser user;
     private TextView productQtyTextView;
     private int productQty = 1;
     @Override
@@ -50,6 +43,7 @@ public class ProductPage extends AppCompatActivity {
         Button btnAddtowishlist = findViewById(R.id.btnAddtowishlist);
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
 
         // Set initial quantity in TextView
         productQtyTextView.setText(String.valueOf(productQty));
@@ -68,23 +62,6 @@ public class ProductPage extends AppCompatActivity {
                 decrementQuantity();
             }
         });
-//        public void onSizeButtonClick(View view){
-////            Reset background color for all buttons
-//            Button btn_addtocart = findViewById(R.id.btn_addtocart);
-//            btn_addtowishlist = findViewById(R.id.edit_profile);
-            db = FirebaseFirestore.getInstance();
-
-//
-//            btn_addtocart.setSelected(R.id.btn_addtocart);
-//            btn_addtowishlist.setSelected(R.id.btn_addtowishlist);
-//
-//            // Set background color for the clicked button
-//            Button clickedButton = (Button) view;
-//            clickedButton.setBackgroundResource(R.drawable.item_selector_selected);
-//            String buttonText = clickedButton.getText().toString();
-//
-//            // Handle the button click logic here
-//        }
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_shop);
@@ -127,16 +104,20 @@ public class ProductPage extends AppCompatActivity {
                 TextView productName = findViewById(R.id.prodName);
                 TextView productQty = findViewById(R.id.qty_item);
                 TextView productPrice = findViewById(R.id.price);
+                ImageView productImage = findViewById(R.id.img_product);
 
+                String userID = user.getUid();
                 String product = productName.getText().toString();
                 int quantity = Integer.parseInt(productQty.getText().toString());
                 String price = productPrice.getText().toString();
+                String image = " ";
 
                 Map<String, Object> cartData = new HashMap<>();
+                cartData.put("userID", userID);
                 cartData.put("product_name", product);
                 cartData.put("product_quantity", quantity);
                 cartData.put("product_subtotal", price);
-
+                cartData.put("product_image", image);
 
                 Map<String, Object> cartProducts = new HashMap<>();
                 cartProducts.put("products", cartData);
@@ -161,15 +142,16 @@ public class ProductPage extends AppCompatActivity {
                 TextView productName = findViewById(R.id.prodName);
                 TextView productQty = findViewById(R.id.qty_item);
                 TextView productPrice = findViewById(R.id.price);
-                ImageView productImage = findViewById(R.id.imageView);
+                ImageView productImage = findViewById(R.id.img_product);
 
+                String userID = user.getUid();
                 String product = productName.getText().toString();
                 int quantity = Integer.parseInt(productQty.getText().toString());
                 String price = productPrice.getText().toString();
-                int imageViewId = productImage.getId();
-                String image = getResources().getResourceEntryName(imageViewId);
+                String image = " ";
 
                 Map<String, Object> wishlistData = new HashMap<>();
+                wishlistData.put("userID", userID);
                 wishlistData.put("product_name", product);
                 wishlistData.put("product_quantity", quantity);
                 wishlistData.put("product_subtotal", price);
