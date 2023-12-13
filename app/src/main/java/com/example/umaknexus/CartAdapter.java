@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartHolder>{
@@ -31,9 +33,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder>{
         holder.prodName.setText(items.get(position).getProdName());
         holder.prodPrice.setText(items.get(position).getProdPrice());
         holder.qty_item.setText(items.get(position).getQty_item());
-        holder.img_product.setImageResource(items.get(position).getImg_product());
         holder.delete_btn.setImageResource(items.get(position).getDelete_btn());
-
+        Glide.with(context).load(items.get(position).getImg_product()).into(holder.img_product);
     }
 
     @Override
