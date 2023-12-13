@@ -45,19 +45,19 @@ public class SearchPage extends AppCompatActivity {
             }
         });
 
-        List<Products> productsItems=new ArrayList<Products>();
-        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-        productsItems.add(new Products("UNIFORM (MALE)", "$300.00",R.drawable.unif_sample));
-        productsItems.add(new Products("LACE (CCIS)", "$300.00",R.drawable.unif_sample));
-        productsItems.add(new Products("BOOKS (SCIENCE)", "$300.00",R.drawable.unif_sample));
-        productsItems.add(new Products("BOOKS (ENGLISH)", "$300.00",R.drawable.unif_sample));
-        productsItems.add(new Products("LACE (CTHM)", "$300.00",R.drawable.unif_sample));
-        productsItems.add(new Products("UNIFORM (PE-FEMALE)", "$300.00",R.drawable.unif_sample));
-        productsItems.add(new Products("UNIFORM (PE-MALE)", "$300.00",R.drawable.unif_sample));
+//        List<Products> productsItems=new ArrayList<Products>();
+//        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
+//        productsItems.add(new Products("UNIFORM (MALE)", "$300.00",R.drawable.unif_sample));
+//        productsItems.add(new Products("LACE (CCIS)", "$300.00",R.drawable.unif_sample));
+//        productsItems.add(new Products("BOOKS (SCIENCE)", "$300.00",R.drawable.unif_sample));
+//        productsItems.add(new Products("BOOKS (ENGLISH)", "$300.00",R.drawable.unif_sample));
+//        productsItems.add(new Products("LACE (CTHM)", "$300.00",R.drawable.unif_sample));
+//        productsItems.add(new Products("UNIFORM (PE-FEMALE)", "$300.00",R.drawable.unif_sample));
+//        productsItems.add(new Products("UNIFORM (PE-MALE)", "$300.00",R.drawable.unif_sample));
 
-        shopProductLayoutManager = new GridLayoutManager(this, 2);
-        shopProductrecyclerView.setLayoutManager(shopProductLayoutManager);
-        shopProductrecyclerView.setAdapter(new shopProductsAdapter(getApplication(), productsItems));
+//        shopProductLayoutManager = new GridLayoutManager(this, 2);
+//        shopProductrecyclerView.setLayoutManager(shopProductLayoutManager);
+//        shopProductrecyclerView.setAdapter(new shopProductsAdapter(getApplication(), productsItems));
 
 
     }
