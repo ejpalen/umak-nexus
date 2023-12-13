@@ -3,9 +3,12 @@ package com.example.umaknexus;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -47,6 +50,7 @@ public class shopProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder
                 intent.putExtra("activity", "shop_products");
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // Add this line
                 context.startActivity(intent);
+//                Toast.makeText(view.getContext(), "PRODUCT ID: "  + productID, Toast.LENGTH_SHORT).show();
             }
         });
     }
