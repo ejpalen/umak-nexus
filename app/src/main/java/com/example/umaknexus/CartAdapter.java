@@ -32,7 +32,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder>{
     public void onBindViewHolder(@NonNull CartHolder holder, int position) {
         holder.prodName.setText(items.get(position).getProdName());
         holder.prodPrice.setText(items.get(position).getProdPrice());
-        holder.qty_item.setText(items.get(position).getQty_item());
+        holder.productQtyTextView.setText(items.get(position).getQty_item());
         holder.delete_btn.setImageResource(items.get(position).getDelete_btn());
         Glide.with(context).load(items.get(position).getImg_product()).into(holder.img_product);
     }
