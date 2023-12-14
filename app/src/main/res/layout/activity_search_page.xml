@@ -22,47 +22,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent">
 
-            <RelativeLayout
+            <androidx.appcompat.widget.SearchView
+                android:id="@+id/searchEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/search_white_bg"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="10dp">
-
-                <!-- ImageView for the search icon -->
-                <ImageView
-                    android:id="@+id/searchIcon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="10dp"
-                    app:srcCompat="@drawable/search_icon" />
-
-                <!-- EditText for search input -->
-                <EditText
-                    android:id="@+id/searchEditText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@id/searchIcon"
-                    android:background="@color/secondary_color"
-                    android:focusable="true"
-                    android:fontFamily="@font/syne"
-                    android:hint="Search" />
-            </RelativeLayout>
+                android:background="@drawable/search_view_bg"
+                app:iconifiedByDefault="false"
+                app:queryHint="Search Product" />
 
             <TextView
                 android:id="@+id/Cancel_Textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:fontFamily="@font/syne"
+                android:gravity="center"
                 android:text="Cancel"
                 android:textColor="@color/black" />
 
