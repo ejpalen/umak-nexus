@@ -35,6 +35,7 @@ public class ProductPage extends AppCompatActivity {
 
     private TextView productQtyTextView;
     private int productQty = 1;
+    String imageUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +72,7 @@ public class ProductPage extends AppCompatActivity {
 
                                 // Retrieve other data from the document
 
-                                String imageUrl = document.getString("Image");
+                                imageUrl = document.getString("Image");
                                 String productCat = document.getString("category");
                                 String productName = document.getString("product_name");
 //                                double productPrice = document.getDouble("product_price");
@@ -163,7 +164,7 @@ public class ProductPage extends AppCompatActivity {
                 String product = productName.getText().toString();
                 int quantity = Integer.parseInt(productQty.getText().toString());
                 String price = productPrice.getText().toString();
-                String image = " ";
+                String image = imageUrl;
 
                 Map<String, Object> cartData = new HashMap<>();
                 cartData.put("userID", userID);
@@ -201,7 +202,7 @@ public class ProductPage extends AppCompatActivity {
                 String product = productName.getText().toString();
                 int quantity = Integer.parseInt(productQty.getText().toString());
                 String price = productPrice.getText().toString();
-                String image = " ";
+                String image = imageUrl;
 
                 Map<String, Object> wishlistData = new HashMap<>();
                 wishlistData.put("userID", userID);
