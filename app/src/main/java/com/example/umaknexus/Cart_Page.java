@@ -2,39 +2,37 @@ package com.example.umaknexus;
 
 import android.os.Bundle;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import android.util.Log;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.WriteBatch;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Cart_Page extends AppCompatActivity {
+
+    private RecyclerView cartRecyclerView;
+    private List<Cart_Item> cartItems;
+    private CartAdapter cartAdapter;
 
     private FirebaseFirestore db;
     private FirebaseAuth auth;
@@ -77,68 +75,85 @@ public class Cart_Page extends AppCompatActivity {
             return false;
         });
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerview);
+        cartRecyclerView = findViewById(R.id.Cartrecyclerview);
+        cartItems = new ArrayList<>();
+        cartAdapter = new CartAdapter(this, cartItems);
+        cartRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        cartRecyclerView.setAdapter(cartAdapter);
 
-        List<Cart_Item> items = new ArrayList<Cart_Item>();
-        items.add(new Cart_Item("Uniform L", "₱300.00", "1", "https://lh3.googleusercontent.com/a/ACg8ocKHWMOGsqqtg4qyIM81R0cxKzL6oLwiUG3er62jQf9F1R8=s96-c", R.drawable.delete_btn));
-        items.add(new Cart_Item("Uniform L", "₱300.00", "1", "https://lh3.googleusercontent.com/a/ACg8ocKHWMOGsqqtg4qyIM81R0cxKzL6oLwiUG3er62jQf9F1R8=s96-c", R.drawable.delete_btn));
-        items.add(new Cart_Item("Uniform L", "₱300.00", "1", "https://lh3.googleusercontent.com/a/ACg8ocKHWMOGsqqtg4qyIM81R0cxKzL6oLwiUG3er62jQf9F1R8=s96-c", R.drawable.delete_btn));
-        items.add(new Cart_Item("Uniform L", "₱300.00", "1", "https://lh3.googleusercontent.com/a/ACg8ocKHWMOGsqqtg4qyIM81R0cxKzL6oLwiUG3er62jQf9F1R8=s96-c", R.drawable.delete_btn));
+        // Call the method to get cart items
+        getCartItems();
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(new CartAdapter(getApplicationContext(), items));
-
-        confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TextView productName = findViewById(R.id.prodName);
-                TextView productQty = findViewById(R.id.qty_item);
-                TextView productPrice = findViewById(R.id.price);
-                ImageView productImage = findViewById(R.id.imageView);
-
-                String product = productName.getText().toString();
-                int quantity = Integer.parseInt(productQty.getText().toString());
-                String price = productPrice.getText().toString();
-                int imageViewId = productImage.getId();
-                String image = getResources().getResourceEntryName(imageViewId);
+        confirm.setOnClickListener(view -> {
+            // Retrieve details from the first item in the cart (you might need to modify this logic based on your use case)
+            if (!cartItems.isEmpty()) {
+                Cart_Item firstCartItem = cartItems.get(0);
+                String product = firstCartItem.getProdName();
+                int quantity = Integer.parseInt(firstCartItem.getQty_item());
+                String price = firstCartItem.getProdPrice();
 
                 Map<String, Object> orderData = new HashMap<>();
                 orderData.put("product_name", product);
                 orderData.put("product_quantity", quantity);
                 orderData.put("product_subtotal", price);
-                orderData.put("product_image", image);
+                // Add other fields as needed
 
                 Map<String, Object> orderProducts = new HashMap<>();
                 orderProducts.put("products", orderData);
 
-                db.collection("orders").add(orderProducts).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(getApplicationContext(), "Checked out succesfully!", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), "Error adding order: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                db.collection("orders").add(orderProducts)
+                        .addOnSuccessListener(documentReference ->
+                                Toast.makeText(getApplicationContext(), "Checked out successfully!", Toast.LENGTH_SHORT).show())
+                        .addOnFailureListener(e ->
+                                Toast.makeText(getApplicationContext(), "Error adding order: " + e.getMessage(), Toast.LENGTH_SHORT).show());
 
                 startActivity(new Intent(getApplicationContext(), Order_Confirmation.class));
                 finish();
+            } else {
+                Toast.makeText(getApplicationContext(), "Cart is empty!", Toast.LENGTH_SHORT).show();
             }
         });
 
         // Set a click listener for the "Clear Cart" button
-        clear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clearCart();
-            }
-        });
+        clear.setOnClickListener(v -> clearCart());
     }
 
     private void clearCart() {
-        Cart_Item.clear();
-        }
+        cartItems.clear();
+        cartAdapter.notifyDataSetChanged();
     }
 
+    private void getCartItems() {
+        // Replace "cart" with your actual Firestore collection name
+        db.collection("cart")
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        Log.e("Firestore error: ", error.getMessage());
+                        return;
+                    }
+
+                    cartItems.clear(); // Clear existing items
+                    for (DocumentSnapshot document : value.getDocuments()) {
+                        String imageUrl = document.getString("product_image");
+                        String productName = document.getString("product_name");
+                        String productPrice = document.getString("product_subtotal");
+
+                        // Check if the "product_quantity" field exists before attempting to retrieve it
+                        Integer productQty = document.getLong("product_quantity") != null
+                                ? Math.toIntExact(document.getLong("product_quantity"))
+                                : null;
+
+                        String productQtyString = String.valueOf(productQty);
+
+                        if (productName != null && productPrice != null && productQty != null) {
+                            cartItems.add(new Cart_Item(productName, productPrice, productQtyString, R.drawable.delete_btn, imageUrl, productQty));
+                            Log.e("Firestore title: ", productName + productPrice + productQty + imageUrl);
+                        } else {
+                            Log.e("Firestore error: ", "Missing fields in document.");
+                        }
+                    }
+                    cartAdapter.notifyDataSetChanged();
+                });
+    }
+
+}
