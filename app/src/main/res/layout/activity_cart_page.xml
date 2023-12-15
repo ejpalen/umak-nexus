@@ -52,6 +52,7 @@
                 android:layout_width="360dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:layout_gravity="center_horizontal"
                 app:srcCompat="@drawable/borderline" />
 
             <LinearLayout
@@ -90,6 +91,7 @@
                 android:id="@+id/borderlineBottom"
                 android:layout_width="360dp"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
                 app:layout_constraintTop_toBottomOf="@+id/total"
                 app:srcCompat="@drawable/borderline" />
 
