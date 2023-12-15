@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -51,7 +52,26 @@ public class Cart_Page extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_cart);
         bottomNavigationView.setOnItemSelectedListener(item -> {
-            // ... (unchanged)
+            if (item.getItemId() == R.id.bottom_home) {
+                startActivity(new Intent(getApplicationContext(), Home.class));
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.bottom_shop) {
+                startActivity(new Intent(getApplicationContext(), Shop_Products.class));
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.bottom_cart) {
+                return true;
+            } else if (item.getItemId() == R.id.bottom_notifications) {
+                startActivity(new Intent(getApplicationContext(), Notifications.class));
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.bottom_profile) {
+                startActivity(new Intent(getApplicationContext(), ProfilePage.class));
+                finish();
+                return true;
+            }
+
             return false;
         });
 
@@ -71,9 +91,6 @@ public class Cart_Page extends AppCompatActivity {
                 String product = firstCartItem.getProdName();
                 int quantity = Integer.parseInt(firstCartItem.getQty_item());
                 String price = firstCartItem.getProdPrice();
-                // Use Glide or another library to load the image
-                // Example: ImageView productImage = findViewById(R.id.imageView);
-                // Glide.with(this).load(firstCartItem.getImg_product()).into(productImage);
 
                 Map<String, Object> orderData = new HashMap<>();
                 orderData.put("product_name", product);
@@ -116,26 +133,27 @@ public class Cart_Page extends AppCompatActivity {
                     }
 
                     cartItems.clear(); // Clear existing items
-                    for (DocumentChange dc : value.getDocumentChanges()) {
-                        if (dc.getType() == DocumentChange.Type.ADDED) {
-                            Cart_Item cartItem = dc.getDocument().toObject(Cart_Item.class);
+                    for (DocumentSnapshot document : value.getDocuments()) {
+                        String imageUrl = document.getString("product_image");
+                        String productName = document.getString("product_name");
+                        String productPrice = document.getString("product_subtotal");
 
-                            String imageUrl = dc.getDocument().getString("product_image");
-                            String productName = dc.getDocument().getString("product_name");
-                            String productPrice = dc.getDocument().getString("product_subtotal");
-                            Double productQty = dc.getDocument().getDouble("product_quantity");
-                            String productQtyString = String.valueOf(productQty);
+                        // Check if the "product_quantity" field exists before attempting to retrieve it
+                        Integer productQty = document.getLong("product_quantity") != null
+                                ? Math.toIntExact(document.getLong("product_quantity"))
+                                : null;
 
-                            if (cartItem != null) {
-//                                cartItems.add(cartItem);
-                                cartItems.add(new Cart_Item(productName, productPrice, productQtyString, R.drawable.delete_btn, imageUrl));
-                                Log.e("Firestore tite: ",  productName + productPrice + productQty + imageUrl);
-                            } else {
-                                Log.e("Firestore error: ", "Failed to convert document to Cart_Item.");
-                            }
+                        String productQtyString = String.valueOf(productQty);
+
+                        if (productName != null && productPrice != null && productQty != null) {
+                            cartItems.add(new Cart_Item(productName, productPrice, productQtyString, R.drawable.delete_btn, imageUrl, productQty));
+                            Log.e("Firestore title: ", productName + productPrice + productQty + imageUrl);
+                        } else {
+                            Log.e("Firestore error: ", "Missing fields in document.");
                         }
                     }
                     cartAdapter.notifyDataSetChanged();
                 });
     }
+
 }

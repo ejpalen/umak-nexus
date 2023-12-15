@@ -27,13 +27,18 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
 
     private Context context;
     private List<Cart_Item> items;
-    private TextView productQtyTextView;
-    private int productQty = 1;
+
 
     public CartAdapter(Context context, List<Cart_Item> items) {
         this.context = context;
         this.items = items;
     }
+
+    public interface OnQuantityChangeListener {
+        void onIncrement(Cart_Item item, int position);
+        void onDecrement(Cart_Item item, int position);
+    }
+
 
     @NonNull
     @Override
@@ -47,90 +52,75 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
 
         holder.prodName.setText(currentItem.getProdName());
         holder.prodPrice.setText(currentItem.getProdPrice());
-        holder.productQtyTextView.setText(currentItem.getQty_item());
+        holder.productQtyTextView.setText(String.valueOf(currentItem.getQuantity()));
         holder.delete_btn.setImageResource(currentItem.getDelete_btn());
         Glide.with(context).load(currentItem.getImg_product()).into(holder.img_product);
 
-        TextView productNameTextView = holder.itemView.findViewById(R.id.prodName);
-        TextView productCategoryTextView = holder.itemView.findViewById(R.id.category);
-        productQtyTextView = holder.itemView.findViewById(R.id.qty_item);
-        TextView productPriceTextView = holder.itemView.findViewById(R.id.price);
-        Button addQty = holder.itemView.findViewById(R.id.btn_add);
-        Button subtractQty = holder.itemView.findViewById(R.id.btn_subtract);
-        ImageView productImageView = holder.itemView.findViewById(R.id.img_product);
-
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        FirebaseAuth auth = FirebaseAuth.getInstance();
-//
-//        FirebaseUser currentUser = auth.getCurrentUser();
-//        if (currentUser != null) {
-//            String userID = currentUser.getUid();
-//
-//            CollectionReference userRef = db.collection("products");
-//
-//            // Query to get the document where the "id" field matches the user ID
-//            userRef.whereEqualTo(FieldPath.documentId(), userID)
-//                    .get()
-//                    .addOnCompleteListener(task -> {
-//                        if (task.isSuccessful()) {
-//                            for (QueryDocumentSnapshot document : task.getResult()) {
-//                                // Retrieve other data from the document
-//                                String imageUrl = document.getString("Image");
-//                                String productCat = document.getString("category");
-//                                String productName = document.getString("product_name");
-//                                String productPrice = document.getString("product_price");
-//                                Double productQty = document.getDouble("product_quantity");
-//                                String productQtyString = String.valueOf(productQty);
-//
-//                                holder.prodName.setText(productName);
-//                                holder.prodPrice.setText(productPrice);
-//                                holder.productQtyTextView.setText(productQtyString);
-//                                holder.delete_btn.setImageResource(currentItem.getDelete_btn());
-//                                Glide.with(context).load(imageUrl).into(holder.img_product);
-//
-////                                productNameTextView.setText(productName);
-////                                productPriceTextView.setText(productPrice);
-////
-////                                // Load the image into ImageView using Glide or another library
-////                                Glide.with(context).load(imageUrl).into(productImageView);
-//
-//                                // Use the document ID as needed
-//                                Log.d("Document ID", document.getId());
-//                            }
-//                        } else {
-//                            // Handle errors
-//                            Toast.makeText(context, "Error getting documents: " + task.getException(), Toast.LENGTH_SHORT).show();
-//                        }
-//                    });
-//        } else {
-//            // Handle the case where productID is null
-//            Toast.makeText(context, "Current user is null", Toast.LENGTH_SHORT).show();
-//        }
-
-        // Set initial quantity in TextView
-        productQtyTextView.setText(String.valueOf(productQty));
-
         // Set click listeners for add and subtract buttons
-        addQty.setOnClickListener(v -> incrementQuantity());
+        holder.addQty.setOnClickListener(v -> incrementQuantity(holder, currentItem));
+        holder.subtractQty.setOnClickListener(v -> decrementQuantity(holder, currentItem));
 
-        subtractQty.setOnClickListener(v -> decrementQuantity());
-    }
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
 
-    private void incrementQuantity() {
-        productQty++;
-        updateQuantityTextView();
-    }
+        FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null) {
+            String userID = currentUser.getUid();
 
-    private void decrementQuantity() {
-        if (productQty > 1) {
-            productQty--;
-            updateQuantityTextView();
+            CollectionReference cartRef = db.collection("cart");
+
+            // Query to get documents where the "userID" field matches the user ID
+            cartRef.whereEqualTo("userID", userID)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String imageUrl = document.getString("product_image");
+                                String productName = document.getString("product_name");
+                                String productPrice = document.getString("product_subtotal");
+
+                                // Get product_quantity as Double
+                                Double productQtyDouble = document.getDouble("product_quantity");
+
+                                // Convert Double to int
+                                int productQty = (productQtyDouble != null) ? productQtyDouble.intValue() : 0;
+                                String productQtyString = String.valueOf(productQty);
+
+                                // Assuming you have a Cart_Item class with appropriate fields
+                                Cart_Item cartItem = new Cart_Item(productName, productPrice, productQtyString, R.drawable.delete_btn, imageUrl, productQty);
+
+                                // Update UI or perform other actions with cartItem
+                                // For example, you might add it to a list or display it in a RecyclerView
+
+                                // Use the document ID as needed
+                                Log.d("Document ID", document.getId());
+                            }
+                        } else {
+                            // Handle errors
+                            Toast.makeText(context, "Error getting documents: " + task.getException(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            // Handle the case where the current user is null
+            Toast.makeText(context, "Current user is null", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void updateQuantityTextView() {
-        productQtyTextView.setText(String.valueOf(productQty));
-    }
+        private void incrementQuantity (CartHolder holder, Cart_Item currentItem){
+            int quantity = currentItem.getQuantity() + 1;
+            currentItem.setQuantity(quantity);
+            holder.productQtyTextView.setText(String.valueOf(quantity));
+        }
+
+        private void decrementQuantity (CartHolder holder, Cart_Item currentItem){
+            int quantity = currentItem.getQuantity();
+            if (quantity > 1) {
+                quantity--;
+                currentItem.setQuantity(quantity);
+                holder.productQtyTextView.setText(String.valueOf(quantity));
+            }
+        }
+
 
     @Override
     public int getItemCount() {

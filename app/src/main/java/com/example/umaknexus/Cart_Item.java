@@ -7,20 +7,21 @@ public class Cart_Item {
     private int delete_btn;
     private String img_product;
 
+    private int quantity;
+
     // No-argument constructor
     public Cart_Item() {
         // Default constructor required for Firestore
     }
 
-    public Cart_Item(String prodName, String prodPrice, String qty_item, int delete_btn, String img_product) {
+    public Cart_Item(String prodName, String prodPrice, String qty_item, int delete_btn, String img_product, int quantity) {
         this.prodName = prodName;
         this.prodPrice = prodPrice;
         this.qty_item = qty_item;
         this.delete_btn = delete_btn;
         this.img_product = img_product;
+        this.quantity = quantity;
     }
-
-    // Add getters and setters as needed
 
     public String getProdName() {
         return prodName;
@@ -61,5 +62,12 @@ public class Cart_Item {
     public void setImg_product(String img_product) {
         this.img_product = img_product;
     }
-}
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+}

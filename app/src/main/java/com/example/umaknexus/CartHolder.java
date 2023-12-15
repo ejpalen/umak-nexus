@@ -8,15 +8,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.BreakIterator;
-
 public class CartHolder extends RecyclerView.ViewHolder {
     ImageView img_product, delete_btn;
     TextView prodName, prodPrice;
     TextView productQtyTextView;
-    private int productQty = 1;
-    private Button addQty;
-    private Button subtractQty;
+    Button addQty;
+    Button subtractQty;
 
     public CartHolder(@NonNull View itemView) {
         super(itemView);
@@ -28,40 +25,19 @@ public class CartHolder extends RecyclerView.ViewHolder {
         productQtyTextView = itemView.findViewById(R.id.qty_item);
         addQty = itemView.findViewById(R.id.btn_add);
         subtractQty = itemView.findViewById(R.id.btn_subtract);
+    }
 
+    public void bind(Cart_Item currentItem, CartAdapter.OnQuantityChangeListener quantityChangeListener) {
         // Set initial quantity in TextView
-        productQtyTextView.setText(String.valueOf(productQty));
+        productQtyTextView.setText(String.valueOf(currentItem.getQuantity()));
 
         // Set click listeners for add and subtract buttons
-        addQty.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                incrementQuantity();
-            }
-        });
-        subtractQty.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                decrementQuantity();
-            }
+        addQty.setOnClickListener(v -> {
+            quantityChangeListener.onIncrement(currentItem, getAdapterPosition());
         });
 
-    }
-
-    private void incrementQuantity() {
-        productQty++;
-        updateQuantityTextView();
-    }
-
-    private void decrementQuantity() {
-        if (productQty > 1) {
-            productQty--;
-            updateQuantityTextView();
-        }
-        else {
-        }
-    }
-    private void updateQuantityTextView() {
-        productQtyTextView.setText(String.valueOf(productQty));
+        subtractQty.setOnClickListener(v -> {
+            quantityChangeListener.onDecrement(currentItem, getAdapterPosition());
+        });
     }
 }

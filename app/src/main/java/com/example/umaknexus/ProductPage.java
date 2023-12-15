@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -21,10 +22,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.util.EventListener;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +40,8 @@ public class ProductPage extends AppCompatActivity {
 
     private TextView productQtyTextView;
     private int productQty = 1;
+
+    String imageUrl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,11 +77,9 @@ public class ProductPage extends AppCompatActivity {
                                 String documentId = document.getId();
 
                                 // Retrieve other data from the document
-
-                                String imageUrl = document.getString("Image");
+                                imageUrl = document.getString("Image"); // Assign the value to imageUrl
                                 String productCat = document.getString("category");
                                 String productName = document.getString("product_name");
-//                                double productPrice = document.getDouble("product_price");
                                 String productPrice = document.getString("product_price");
 
                                 productCategoryTextView.setText(productCat);
@@ -163,8 +168,12 @@ public class ProductPage extends AppCompatActivity {
                 String product = productName.getText().toString();
                 int quantity = Integer.parseInt(productQty.getText().toString());
                 String price = productPrice.getText().toString();
-                String image = " ";
+                String image = imageUrl; // Replace with the actual image URL
 
+                // Create a new document reference with a unique ID
+                DocumentReference cartRef = db.collection("cart").document();
+
+                // Create a map to represent the data
                 Map<String, Object> cartData = new HashMap<>();
                 cartData.put("userID", userID);
                 cartData.put("product_name", product);
@@ -172,22 +181,23 @@ public class ProductPage extends AppCompatActivity {
                 cartData.put("product_subtotal", price);
                 cartData.put("product_image", image);
 
-                Map<String, Object> cartProducts = new HashMap<>();
-                cartProducts.put("products", cartData);
-
-                db.collection("cart").add(cartProducts).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(getApplicationContext(), "Product added to cart.", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), "Error adding product: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                // Set the entire map as the document data
+                cartRef.set(cartData)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(getApplicationContext(), "Product added to cart.", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getApplicationContext(), "Error adding product: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
+
 
         btnAddtowishlist.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -201,7 +211,7 @@ public class ProductPage extends AppCompatActivity {
                 String product = productName.getText().toString();
                 int quantity = Integer.parseInt(productQty.getText().toString());
                 String price = productPrice.getText().toString();
-                String image = " ";
+                String image = imageUrl;
 
                 Map<String, Object> wishlistData = new HashMap<>();
                 wishlistData.put("userID", userID);
