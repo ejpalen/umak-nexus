@@ -17,6 +17,5 @@ public class WishlistViewHolder extends RecyclerView.ViewHolder {
         wishlistProduct = itemView.findViewById(R.id.wishlistProduct);
         wishlistPrice = itemView.findViewById(R.id.wishlistPrice);
         productImage = itemView.findViewById(R.id.wishlistProductImg);
-
     }
 }
