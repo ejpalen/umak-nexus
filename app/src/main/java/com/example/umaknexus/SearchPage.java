@@ -165,10 +165,11 @@ public class SearchPage extends AppCompatActivity {
                                 String image = dc.getDocument().getString("Image");
                                 String productName = dc.getDocument().getString("product_name");
                                 String productPrice = dc.getDocument().getString("product_price");
+                                String productCategory = dc.getDocument().getString("category");
                                 String productID = dc.getDocument().getId();
 
                                 if (productName != null && productPrice != null) {
-                                    productsItems.add(new Products(productName, productPrice, image, productID));
+                                    productsItems.add(new Products(productName, productPrice, image, productID, productCategory));
                                 } else {
                                     Log.e("Firestore error: ", "One or more fields are null.");
                                 }

@@ -2,11 +2,12 @@ package com.example.umaknexus;
 
 public class Categories {
     String Category_name;
-    String icon;
+    String icon, page;
 
-    public Categories(String Category_name, String icon) {
+    public Categories(String Category_name, String icon, String page) {
         this.Category_name = Category_name;
         this.icon = icon;
+        this.page = page;
     }
 
     public String getName() {
@@ -23,5 +24,13 @@ public class Categories {
 
     public void setImage(String icon) {
         this.icon = icon;
+    }
+
+    public String getPage() {
+        return page;
+    }
+
+    public void setPage(String page) {
+        this.page = page;
     }
 }

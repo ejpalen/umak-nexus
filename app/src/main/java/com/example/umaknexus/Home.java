@@ -6,18 +6,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -29,15 +32,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Home extends AppCompatActivity {
-    TextView name_textView;
+    TextView name_textView, NewArrivalsViewAll_Btn, BestSellersViewAll_Btn;
+    Button ViewAllProductsBtn;
     FirebaseAuth auth;
     FirebaseUser user;
-    FirebaseFirestore database;
+    static FirebaseFirestore database;
     List<Categories>  categoryItems;
+    private static RecyclerView newArrivals_RecyclerView;
+    private static RecyclerView bestSellers_RecyclerView;
+    private static List<NewArrivals_Products> productsItems;
+    private static List<Bestsellers_Products> bestSellersProductsItems;
     RelativeLayout searchBar;
     private CategoryAdapter categoryAdapter;
+    private static NewArrivals_Products_Adapter productsAdapter;
+    private static Bestsellers_Products_Adapter bestSellersProductsAdapter;
     private ProgressDialog progressDialog;
-
+    String page="";
+    public static Boolean isCurrentShop = false;
 
     @Override
     public void onStart() {
@@ -67,6 +78,10 @@ public class Home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         database = FirebaseFirestore.getInstance();
+
+        isCurrentShop = false;
+
+        page="Home";
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
 
@@ -110,9 +125,9 @@ public class Home extends AppCompatActivity {
 
         categoryItems = new ArrayList<>();
         categoryAdapter = new CategoryAdapter(getApplicationContext(), categoryItems);
-        categoryItems.add(new Categories("All", "https://firebasestorage.googleapis.com/v0/b/umak-nexus-53bf2.appspot.com/o/categoryImages%2Fall_icon.png?alt=media&token=079787e2-b46a-48e9-b9b7-0de4d33ddd0b"));
-        categoryItems.add(new Categories("Bestsellers", "https://firebasestorage.googleapis.com/v0/b/umak-nexus-53bf2.appspot.com/o/categoryImages%2Fbestsellers_icon.png?alt=media&token=b68027cf-d6a6-4c93-ab1e-709e5b3d6671"));
-        categoryItems.add(new Categories("Latest", "https://firebasestorage.googleapis.com/v0/b/umak-nexus-53bf2.appspot.com/o/categoryImages%2Flatest_icon.png?alt=media&token=fb75215a-8698-428c-a8aa-3ac144592e9a"));
+        categoryItems.add(new Categories("All", "https://firebasestorage.googleapis.com/v0/b/umak-nexus-53bf2.appspot.com/o/categoryImages%2Fall_icon.png?alt=media&token=079787e2-b46a-48e9-b9b7-0de4d33ddd0b", page));
+        categoryItems.add(new Categories("Bestsellers", "https://firebasestorage.googleapis.com/v0/b/umak-nexus-53bf2.appspot.com/o/categoryImages%2Fbestsellers_icon.png?alt=media&token=b68027cf-d6a6-4c93-ab1e-709e5b3d6671", page));
+        categoryItems.add(new Categories("Latest", "https://firebasestorage.googleapis.com/v0/b/umak-nexus-53bf2.appspot.com/o/categoryImages%2Flatest_icon.png?alt=media&token=fb75215a-8698-428c-a8aa-3ac144592e9a", page));
 
         getCategoryItems();
 
@@ -120,29 +135,56 @@ public class Home extends AppCompatActivity {
         category_RecyclerView.setLayoutManager(layoutManager);
         category_RecyclerView.setAdapter(categoryAdapter);
 
-        List<Products> productsItems=new ArrayList<Products>();
-//        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-//        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-//        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-//        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-//        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-//        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-//        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
-//        productsItems.add(new Products("UNIFORM (FEMALE)", "$300.00",R.drawable.unif_sample));
+        productsItems = new ArrayList<>();
+        productsAdapter = new NewArrivals_Products_Adapter(getApplicationContext(), productsItems);
 
-
-        RecyclerView newArrivals_RecyclerView = findViewById(R.id.NewArrivalsRecyclerView);
-
+        newArrivals_RecyclerView = findViewById(R.id.NewArrivalsRecyclerView);
         LinearLayoutManager NewArrivalslayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         newArrivals_RecyclerView.setLayoutManager(NewArrivalslayoutManager);
-        newArrivals_RecyclerView.setAdapter(new NewArrivals_Products_Adapter(getApplication(), productsItems));
+        newArrivals_RecyclerView.setAdapter(productsAdapter);
 
 
-        RecyclerView bestSellers_RecyclerView = findViewById(R.id.BestSellersRecyclerView);
+        bestSellersProductsItems = new ArrayList<>();
+        bestSellersProductsAdapter = new Bestsellers_Products_Adapter(getApplicationContext(), bestSellersProductsItems);
 
-        LinearLayoutManager bestSellers_NewlayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        bestSellers_RecyclerView.setLayoutManager(bestSellers_NewlayoutManager);
-        bestSellers_RecyclerView.setAdapter(new NewArrivals_Products_Adapter(getApplication(), productsItems));
+        bestSellers_RecyclerView = findViewById(R.id.BestSellersRecyclerView);
+        LinearLayoutManager bestSellerslayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        bestSellers_RecyclerView.setLayoutManager(bestSellerslayoutManager);
+        bestSellers_RecyclerView.setAdapter(bestSellersProductsAdapter);
+
+        getBestSellersProductsItems("");
+        getNewArrivalsProductsItems("");
+
+        ViewAllProductsBtn = findViewById(R.id.ViewAllProducts_btn);
+
+        ViewAllProductsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), Shop_Products.class));
+            }
+        });
+
+        BestSellersViewAll_Btn = findViewById(R.id.BestSellersViewAllBtn);
+        NewArrivalsViewAll_Btn = findViewById(R.id.NewArrivalsViewAllBtn);
+
+        BestSellersViewAll_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Home.this, Shop_Products.class);
+                intent.putExtra("selectedPosition", 1);
+                startActivity(intent);
+            }
+        });
+
+        NewArrivalsViewAll_Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Home.this, Shop_Products.class);
+                intent.putExtra("selectedPosition", 2);
+                startActivity(intent);
+            }
+        });
+
     }
 
     private void showProgressDialog() {
@@ -172,7 +214,7 @@ public class Home extends AppCompatActivity {
                                 String id = dc.getDocument().getId();
 
                                 if (categoryName != null && icon != null) {
-                                    categoryItems.add(new Categories(categoryName, icon));
+                                    categoryItems.add(new Categories(categoryName, icon, page));
                                 } else {
                                     Log.e("Firestore error: ", "One or more fields are null.");
                                 }
@@ -184,5 +226,69 @@ public class Home extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    public static void getNewArrivalsProductsItems(String categoryFilter) {
+        CollectionReference productsCollection = database.collection("products");
+
+        Query query, BestSellerQuery;
+        query = productsCollection.orderBy("product_name", Query.Direction.DESCENDING).limit(10);
+
+        query.addSnapshotListener((value, error) -> {
+            if (error != null) {
+                Log.e("Firestore error: ", error.getMessage());
+                return;
+            }
+
+            productsItems.clear(); // Clear existing items
+            for (DocumentChange dc : value.getDocumentChanges()) {
+                if (dc.getType() == DocumentChange.Type.ADDED) {
+                    String image = dc.getDocument().getString("Image");
+                    String productName = dc.getDocument().getString("product_name");
+                    String productPrice = dc.getDocument().getString("product_price");
+                    String productCategory = dc.getDocument().getString("category");
+                    String productID = dc.getDocument().getId();
+
+                    if (productName != null && productPrice != null) {
+                        productsItems.add(new NewArrivals_Products(productName, productPrice, image, productID, productCategory));
+                    } else {
+                        Log.e("Firestore error: ", "One or more fields are null.");
+                    }
+                }
+            }
+            productsAdapter.notifyDataSetChanged();
+        });
+
+    }
+    public static void getBestSellersProductsItems(String categoryFilter) {
+        CollectionReference productsCollection = database.collection("products");
+
+        Query query, BestSellerQuery;
+        BestSellerQuery = productsCollection.orderBy("sales", Query.Direction.DESCENDING).limit(10);
+
+        BestSellerQuery.addSnapshotListener((value, error) -> {
+            if (error != null) {
+                Log.e("Firestore error: ", error.getMessage());
+                return;
+            }
+
+            bestSellersProductsItems.clear(); // Clear existing items
+            for (DocumentChange dc : value.getDocumentChanges()) {
+                if (dc.getType() == DocumentChange.Type.ADDED) {
+                    String image = dc.getDocument().getString("Image");
+                    String productName = dc.getDocument().getString("product_name");
+                    String productPrice = dc.getDocument().getString("product_price");
+                    String productCategory = dc.getDocument().getString("category");
+                    String productID = dc.getDocument().getId();
+
+                    if (productName != null && productPrice != null) {
+                        bestSellersProductsItems.add(new Bestsellers_Products(productName, productPrice, image, productID, productCategory));
+                    } else {
+                        Log.e("Firestore error: ", "One or more fields are null.");
+                    }
+                }
+            }
+            bestSellersProductsAdapter.notifyDataSetChanged();
+        });
     }
 }

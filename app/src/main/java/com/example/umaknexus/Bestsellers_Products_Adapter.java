@@ -11,12 +11,13 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
-public class NewArrivals_Products_Adapter extends RecyclerView.Adapter<ProductsViewHolder> {
+
+public class Bestsellers_Products_Adapter extends RecyclerView.Adapter<ProductsViewHolder> {
 
     Context context;
-    List<NewArrivals_Products> items;
+    List<Bestsellers_Products> items;
 
-    public NewArrivals_Products_Adapter(Context context, List<NewArrivals_Products> items) {
+    public Bestsellers_Products_Adapter(Context context, List<Bestsellers_Products> items) {
         this.context = context;
         this.items = items;
     }
@@ -30,7 +31,7 @@ public class NewArrivals_Products_Adapter extends RecyclerView.Adapter<ProductsV
     @Override
     public void onBindViewHolder(@NonNull ProductsViewHolder holder, int position) {
         holder.productsTextView.setText(items.get(position).getName());
-       // holder.productsImageView.setImageResource(items.get(position).getImage());
+        // holder.productsImageView.setImageResource(items.get(position).getImage());
         Glide.with(context).load(items.get(position).getImage()).into(holder.productsImageView);
         holder.productsPriceTextView.setText(items.get(position).getPrice());
     }

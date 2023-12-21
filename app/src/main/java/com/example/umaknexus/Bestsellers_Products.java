@@ -1,10 +1,10 @@
 package com.example.umaknexus;
 
-public class Products {
+public class Bestsellers_Products {
     String name,price,productID, productCategory;
     String image;
 
-    public Products(String name, String price, String image, String productID, String productCategory) {
+    public Bestsellers_Products(String name, String price, String image, String productID, String productCategory) {
         this.name = name;
         this.price = price;
         this.image = image;

@@ -15,4 +15,8 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="AppSearchView" parent="Widget.AppCompat.SearchView">
+        <item name="android:fontFamily">@font/syne</item>
+    </style>
+
 </resources>
