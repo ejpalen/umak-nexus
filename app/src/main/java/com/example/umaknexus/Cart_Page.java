@@ -79,7 +79,9 @@ public class Cart_Page extends AppCompatActivity {
         cartItems = new ArrayList<>();
         cartAdapter = new CartAdapter(this, cartItems);
         cartRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        cartRecyclerView.setAdapter(cartAdapter);
+
+        // Call the method to set up the CartAdapter
+        setupCartAdapter();
 
         // Call the method to get cart items
         getCartItems();
@@ -87,36 +89,57 @@ public class Cart_Page extends AppCompatActivity {
         confirm.setOnClickListener(view -> {
             // Retrieve details from the first item in the cart (you might need to modify this logic based on your use case)
             if (!cartItems.isEmpty()) {
-                Cart_Item firstCartItem = cartItems.get(0);
-                String product = firstCartItem.getProdName();
-                int quantity = Integer.parseInt(firstCartItem.getQty_item());
-                String price = firstCartItem.getProdPrice();
+                List<Map<String, Object>> orderProductsList = new ArrayList<>();
 
-                Map<String, Object> orderData = new HashMap<>();
-                orderData.put("product_name", product);
-                orderData.put("product_quantity", quantity);
-                orderData.put("product_subtotal", price);
-                // Add other fields as needed
+                // Loop through cart items and create a list of order products
+                for (Cart_Item cartItem : cartItems) {
+                    String product = cartItem.getProdName();
+                    int quantity = Integer.parseInt(cartItem.getQty_item());
+                    String price = cartItem.getProdPrice();
 
-                Map<String, Object> orderProducts = new HashMap<>();
-                orderProducts.put("products", orderData);
+                    Map<String, Object> orderData = new HashMap<>();
+                    orderData.put("product_name", product);
+                    orderData.put("product_quantity", quantity);
+                    orderData.put("product_subtotal", price);
+                    // Add other fields as needed
 
-                db.collection("orders").add(orderProducts)
-                        .addOnSuccessListener(documentReference ->
-                                Toast.makeText(getApplicationContext(), "Checked out successfully!", Toast.LENGTH_SHORT).show())
+                    orderProductsList.add(orderData);
+                }
+
+                Map<String, Object> order = new HashMap<>();
+                order.put("products", orderProductsList);
+
+                db.collection("orders")
+                        .add(order)
+                        .addOnSuccessListener(documentReference -> {
+                            Toast.makeText(getApplicationContext(), "Checked out successfully!", Toast.LENGTH_SHORT).show();
+
+                            // Calculate the total price
+                            double totalPrice = calculateTotalPrice();
+
+                            // Update the total amount TextView
+                            TextView amountTextView = findViewById(R.id.amount);
+                            amountTextView.setText(String.format("₱%.2f", totalPrice));
+
+                            // Clear the cart after a successful order
+                            clearCart();
+
+                            startActivity(new Intent(getApplicationContext(), Order_Confirmation.class));
+                            finish();
+                        })
                         .addOnFailureListener(e ->
                                 Toast.makeText(getApplicationContext(), "Error adding order: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-
-                startActivity(new Intent(getApplicationContext(), Order_Confirmation.class));
-                finish();
             } else {
                 Toast.makeText(getApplicationContext(), "Cart is empty!", Toast.LENGTH_SHORT).show();
             }
         });
 
+
         // Set a click listener for the "Clear Cart" button
         clear.setOnClickListener(v -> clearCart());
+
     }
+
 
     private void clearCart() {
         cartItems.clear();
@@ -144,9 +167,10 @@ public class Cart_Page extends AppCompatActivity {
                                 : null;
 
                         String productQtyString = String.valueOf(productQty);
+                        String documentId = document.getId();
 
                         if (productName != null && productPrice != null && productQty != null) {
-                            cartItems.add(new Cart_Item(productName, productPrice, productQtyString, R.drawable.delete_btn, imageUrl, productQty));
+                            cartItems.add(new Cart_Item(productName, productPrice, productQtyString, R.drawable.delete_btn, imageUrl, productQty, documentId));
                             Log.e("Firestore title: ", productName + productPrice + productQty + imageUrl);
                         } else {
                             Log.e("Firestore error: ", "Missing fields in document.");
@@ -154,6 +178,77 @@ public class Cart_Page extends AppCompatActivity {
                     }
                     cartAdapter.notifyDataSetChanged();
                 });
+    }
+
+    private double calculateTotalPrice() {
+        double totalPrice = 0.0;
+
+        for (Cart_Item cartItem : cartItems) {
+            // Parse the price and quantity to calculate subtotal for each item
+            double price = Double.parseDouble(cartItem.getProdPrice());
+            int quantity = Integer.parseInt(cartItem.getQty_item());
+            double subtotal = price * quantity;
+
+            // Add the subtotal to the total price
+            totalPrice += subtotal;
+        }
+
+        return totalPrice;
+    }
+
+
+    private void setupCartAdapter() {
+        cartAdapter.setOnItemDeleteListener(position -> {
+            // Handle item deletion here
+            removeItemFromCartAndFirestore(position);
+        });
+    }
+
+
+    private void removeItemFromCartAndFirestore(int position) {
+        // Get the item to be removed
+        Cart_Item itemToRemove = cartItems.get(position);
+
+        // Remove the item from Firestore
+        // Replace "cart" with your actual Firestore collection name
+        db.collection("cart").document(itemToRemove.getDocumentId()).delete()
+                .addOnSuccessListener(aVoid -> {
+                    // Remove the item from the local list
+                    cartItems.remove(position);
+
+                    // Notify the adapter that the data set has changed
+                    cartAdapter.notifyItemRemoved(position);
+
+                    // Now, add the item to the "orders" collection
+                    addToOrdersCollection(itemToRemove);
+
+                    // You can also update the total price or perform other actions
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(getApplicationContext(), "Error deleting item: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+
+    // Method to add the item to the "orders" collection
+    private void addToOrdersCollection(Cart_Item cartItem) {
+        Map<String, Object> orderProduct = new HashMap<>();
+        orderProduct.put("product_name", cartItem.getProdName());
+        orderProduct.put("product_quantity", cartItem.getQuantity());
+        orderProduct.put("product_subtotal", cartItem.getProdPrice());
+        // Add other fields as needed
+
+        db.collection("orders")
+                .add(orderProduct)
+                .addOnSuccessListener(documentReference -> {
+                    Toast.makeText(getApplicationContext(), "Checked out successfully!", Toast.LENGTH_SHORT).show();
+
+                    // Clear the cart after a successful order
+                    clearCart();
+
+                    startActivity(new Intent(getApplicationContext(), Order_Confirmation.class));
+                    finish();
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(getApplicationContext(), "Error adding order: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
 }
