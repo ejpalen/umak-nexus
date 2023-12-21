@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import java.util.List;
@@ -43,6 +44,9 @@ public class shopProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder
        // holder.productsImageView.setImageResource(items.get(position).getImage());
         Glide.with(context).load(items.get(position).getImage()).into(holder.productsImageView);
         holder.productsPriceTextView.setText(items.get(position).getPrice());
+
+        holder.shopProductLinearLayout.startAnimation(AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.anim_one));
+
 
         holder.productsImageView.setOnClickListener(new View.OnClickListener() {
             @Override
