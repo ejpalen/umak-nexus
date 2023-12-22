@@ -48,7 +48,7 @@ public class shopProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder
         holder.shopProductLinearLayout.startAnimation(AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.anim_one));
 
 
-        holder.productsImageView.setOnClickListener(new View.OnClickListener() {
+        holder.shopProductLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Handle image click, start ProductPage activity with product code
