@@ -27,7 +27,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
 
     private Context context;
     private List<Cart_Item> items;
-    private OnItemDeleteListener deleteListener;
 
 
     public CartAdapter(Context context, List<Cart_Item> items) {
@@ -38,14 +37,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
     public interface OnQuantityChangeListener {
         void onIncrement(Cart_Item item, int position);
         void onDecrement(Cart_Item item, int position);
-    }
-
-    public interface OnItemDeleteListener {
-        void onItemDelete(int position);
-    }
-
-    public void setOnItemDeleteListener(OnItemDeleteListener listener) {
-        this.deleteListener = listener;
     }
 
 
@@ -96,8 +87,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
                                 String productQtyString = String.valueOf(productQty);
 
                                 // Assuming you have a Cart_Item class with appropriate fields
-                                String documentId = document.getId();
-                                Cart_Item cartItem = new Cart_Item(productName, productPrice, productQtyString, R.drawable.delete_btn, imageUrl, productQty, documentId);
+                                Cart_Item cartItem = new Cart_Item(productName, productPrice, productQtyString, R.drawable.delete_btn, imageUrl, productQty);
 
                                 // Update UI or perform other actions with cartItem
                                 // For example, you might add it to a list or display it in a RecyclerView
@@ -114,30 +104,22 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
             // Handle the case where the current user is null
             Toast.makeText(context, "Current user is null", Toast.LENGTH_SHORT).show();
         }
-
-        // Set click listener for delete button
-        holder.delete_btn.setOnClickListener(v -> {
-            // Call the onItemDelete method of the listener if it's set
-            if (deleteListener != null) {
-                deleteListener.onItemDelete(position);
-            }
-        });
     }
 
-        private void incrementQuantity (CartHolder holder, Cart_Item currentItem){
-            int quantity = currentItem.getQuantity() + 1;
+    private void incrementQuantity (CartHolder holder, Cart_Item currentItem){
+        int quantity = currentItem.getQuantity() + 1;
+        currentItem.setQuantity(quantity);
+        holder.productQtyTextView.setText(String.valueOf(quantity));
+    }
+
+    private void decrementQuantity (CartHolder holder, Cart_Item currentItem){
+        int quantity = currentItem.getQuantity();
+        if (quantity > 1) {
+            quantity--;
             currentItem.setQuantity(quantity);
             holder.productQtyTextView.setText(String.valueOf(quantity));
         }
-
-        private void decrementQuantity (CartHolder holder, Cart_Item currentItem){
-            int quantity = currentItem.getQuantity();
-            if (quantity > 1) {
-                quantity--;
-                currentItem.setQuantity(quantity);
-                holder.productQtyTextView.setText(String.valueOf(quantity));
-            }
-        }
+    }
 
 
     @Override
