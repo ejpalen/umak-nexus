@@ -27,17 +27,17 @@ public class CartHolder extends RecyclerView.ViewHolder {
         subtractQty = itemView.findViewById(R.id.btn_subtract);
     }
 
-    public void bind(Cart_Item currentItem, CartAdapter.OnQuantityChangeListener quantityChangeListener) {
+    public void bind(Cart_Item currentItem, CartAdapter.OnQuantityChangeListener quantityChangeListener, int position) {
         // Set initial quantity in TextView
         productQtyTextView.setText(String.valueOf(currentItem.getQuantity()));
 
         // Set click listeners for add and subtract buttons
         addQty.setOnClickListener(v -> {
-            quantityChangeListener.onIncrement(currentItem, getAdapterPosition());
+            quantityChangeListener.onIncrement(currentItem, position);
         });
 
         subtractQty.setOnClickListener(v -> {
-            quantityChangeListener.onDecrement(currentItem, getAdapterPosition());
+            quantityChangeListener.onDecrement(currentItem, position);
         });
     }
 }
