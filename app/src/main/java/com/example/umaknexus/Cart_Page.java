@@ -44,6 +44,7 @@ public class Cart_Page extends AppCompatActivity implements CartAdapter.OnItemRe
 
         Button confirm = findViewById(R.id.btn_confirm);
         Button clear = findViewById(R.id.clear);
+        TextView totalAmountTextView = findViewById(R.id.amount);
 
         // Initialize Firebase
         db = FirebaseFirestore.getInstance();
@@ -77,9 +78,47 @@ public class Cart_Page extends AppCompatActivity implements CartAdapter.OnItemRe
 
         cartRecyclerView = findViewById(R.id.Cartrecyclerview);
         cartItems = new ArrayList<>();
-        cartAdapter = new CartAdapter(this, cartItems);
+        cartAdapter = new CartAdapter(this, cartItems, totalAmountTextView);
         cartRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         cartRecyclerView.setAdapter(cartAdapter);
+        cartAdapter.setOnItemRemoveListener(this);
+        cartAdapter.setOnQuantityChangeListener(new CartAdapter.OnQuantityChangeListener() {
+            @Override
+            public void onIncrement(Cart_Item item, int position) {
+                // Implement the logic for incrementing the quantity
+                int newQuantity = item.getQuantity() + 1;
+                item.setQuantity(newQuantity);
+
+                // Update the Firestore document with the new quantity
+                updateQuantityInFirestore(item);
+
+                // Update the local list and notify the adapter
+                cartItems.set(position, item);
+                cartAdapter.notifyItemChanged(position);
+
+                // Update the total price here
+                cartAdapter.updateTotalPrice();
+            }
+
+            @Override
+            public void onDecrement(Cart_Item item, int position) {
+                // Implement the logic for decrementing the quantity
+                int newQuantity = item.getQuantity() - 1;
+                if (newQuantity >= 1) {
+                    item.setQuantity(newQuantity);
+
+                    // Update the Firestore document with the new quantity
+                    updateQuantityInFirestore(item);
+
+                    // Update the local list and notify the adapter
+                    cartItems.set(position, item);
+                    cartAdapter.notifyItemChanged(position);
+
+                    // Update the total price here
+                    cartAdapter.updateTotalPrice();
+                }
+            }
+        });
 
         // Call the method to get cart items
         getCartItems();
@@ -106,6 +145,9 @@ public class Cart_Page extends AppCompatActivity implements CartAdapter.OnItemRe
                                 Toast.makeText(getApplicationContext(), "Checked out successfully!", Toast.LENGTH_SHORT).show())
                         .addOnFailureListener(e ->
                                 Toast.makeText(getApplicationContext(), "Error adding order: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+
+                // Call the method to update the total price initially
+                cartAdapter.updateTotalPrice();
 
                 clearCart();
                 startActivity(new Intent(getApplicationContext(), Order_Confirmation.class));
@@ -171,9 +213,31 @@ public class Cart_Page extends AppCompatActivity implements CartAdapter.OnItemRe
                             Log.e("Firestore error: ", "Missing fields in document.");
                         }
                     }
+
+                    // Update the total price after fetching cart items
+                    updateTotalPrice();
                     cartAdapter.notifyDataSetChanged();
                 });
     }
 
+    private void updateQuantityInFirestore(Cart_Item item) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference cartItemRef = db.collection("cart").document(item.getDocumentId());
 
+        // Create a new map to update only the quantity field
+        Map<String, Object> updateData = new HashMap<>();
+        updateData.put("product_quantity", item.getQuantity());
+
+        // Update the Firestore document with the new quantity
+        cartItemRef.update(updateData)
+                .addOnSuccessListener(aVoid ->
+                        Log.d("Firestore", "DocumentSnapshot successfully updated!"))
+                .addOnFailureListener(e ->
+                        Log.w("Firestore", "Error updating document", e));
+    }
+
+
+    private void updateTotalPrice() {
+        cartAdapter.updateTotalPrice();
+    }
 }

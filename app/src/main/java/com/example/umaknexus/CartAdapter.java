@@ -28,6 +28,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
     private Context context;
     private List<Cart_Item> items;
 
+    private TextView totalAmountTextView;
+
     public interface OnItemRemoveListener {
         void onItemRemove(Cart_Item item);
     }
@@ -38,10 +40,17 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
         this.onItemRemoveListener = listener;
     }
 
+    private OnQuantityChangeListener onQuantityChangeListener;
 
-    public CartAdapter(Context context, List<Cart_Item> items) {
+    public void setOnQuantityChangeListener(OnQuantityChangeListener listener) {
+        this.onQuantityChangeListener = listener;
+    }
+
+
+    public CartAdapter(Context context, List<Cart_Item> items, TextView totalAmountTextView) {
         this.context = context;
         this.items = items;
+        this.totalAmountTextView = totalAmountTextView;
     }
 
     public interface OnQuantityChangeListener {
@@ -60,6 +69,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
     public void onBindViewHolder(@NonNull CartHolder holder, int position) {
         Cart_Item currentItem = items.get(position);
 
+        holder.bind(currentItem, onQuantityChangeListener, position);
+
         holder.prodName.setText(currentItem.getProdName());
         holder.prodPrice.setText(currentItem.getProdPrice());
         holder.productQtyTextView.setText(String.valueOf(currentItem.getQuantity()));
@@ -67,8 +78,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
         Glide.with(context).load(currentItem.getImg_product()).into(holder.img_product);
 
         // Set click listeners for add and subtract buttons
-        holder.addQty.setOnClickListener(v -> incrementQuantity(holder, currentItem));
-        holder.subtractQty.setOnClickListener(v -> decrementQuantity(holder, currentItem));
+        holder.addQty.setOnClickListener(v -> incrementQuantity(holder, currentItem, position));
+        holder.subtractQty.setOnClickListener(v -> decrementQuantity(holder, currentItem, position));
+
 
         holder.delete_btn.setOnClickListener(v -> {
             // Call the method to remove the item from the cart and Firestore
@@ -121,6 +133,20 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
         }
     }
 
+    // Make these methods public
+    public void updateTotalPrice() {
+        double total = calculateTotalPrice();
+        totalAmountTextView.setText(String.format("₱ %.2f", total));
+    }
+
+    public double calculateTotalPrice() {
+        double total = 0;
+        for (Cart_Item item : items) {
+            total += Double.parseDouble(item.getProdPrice()) * item.getQuantity();
+        }
+        return total;
+    }
+
     public void removeFromFirestore(String itemId) {
         // Replace the comments with the actual logic to delete the document from Firestore
         // Example assuming you have a "cart" collection:
@@ -157,19 +183,22 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
         return currentItem.getDocumentId();
     }
 
-    private void incrementQuantity (CartHolder holder, Cart_Item currentItem){
-        int quantity = currentItem.getQuantity() + 1;
+    private void incrementQuantity(CartHolder holder, Cart_Item currentItem, int position) {
+        int quantity = currentItem.getQuantity();
         currentItem.setQuantity(quantity);
         holder.productQtyTextView.setText(String.valueOf(quantity));
+
+        // Update the Firestore document with the new quantity
+        onQuantityChangeListener.onIncrement(currentItem, position);
     }
 
-    private void decrementQuantity (CartHolder holder, Cart_Item currentItem){
+    private void decrementQuantity(CartHolder holder, Cart_Item currentItem, int position) {
         int quantity = currentItem.getQuantity();
-        if (quantity > 1) {
-            quantity--;
             currentItem.setQuantity(quantity);
             holder.productQtyTextView.setText(String.valueOf(quantity));
-        }
+
+            // Update the Firestore document with the new quantity
+            onQuantityChangeListener.onDecrement(currentItem, position);
     }
 
 
