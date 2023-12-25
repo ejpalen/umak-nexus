@@ -28,6 +28,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
     private Context context;
     private List<Cart_Item> items;
 
+    public interface OnItemRemoveListener {
+        void onItemRemove(Cart_Item item);
+    }
+
+    private OnItemRemoveListener onItemRemoveListener;
+
+    public void setOnItemRemoveListener(OnItemRemoveListener listener) {
+        this.onItemRemoveListener = listener;
+    }
+
 
     public CartAdapter(Context context, List<Cart_Item> items) {
         this.context = context;
@@ -59,6 +69,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
         // Set click listeners for add and subtract buttons
         holder.addQty.setOnClickListener(v -> incrementQuantity(holder, currentItem));
         holder.subtractQty.setOnClickListener(v -> decrementQuantity(holder, currentItem));
+
+        holder.delete_btn.setOnClickListener(v -> {
+            // Call the method to remove the item from the cart and Firestore
+            removeItem(currentItem, position);
+        });
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -104,6 +119,42 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
             // Handle the case where the current user is null
             Toast.makeText(context, "Current user is null", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void removeFromFirestore(String itemId) {
+        // Replace the comments with the actual logic to delete the document from Firestore
+        // Example assuming you have a "cart" collection:
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("cart").document(itemId)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    // Document successfully deleted
+                    Log.d("Firestore", "DocumentSnapshot successfully deleted!");
+                })
+                .addOnFailureListener(e -> {
+                    // Handle errors
+                    Log.w("Firestore", "Error removing product", e);
+                });
+    }
+
+    private void removeItem(Cart_Item currentItem, int position) {
+        // Remove the item from Firestore
+        removeFromFirestore(currentItem.getDocumentId());
+
+        // Notify the listener that an item is removed before updating the local list
+        if (onItemRemoveListener != null) {
+            onItemRemoveListener.onItemRemove(currentItem);
+        }
+
+        // Remove the item from the local list
+        items.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public String getItemId(Cart_Item currentItem) {
+        // Replace the comments with the actual logic to get the unique identifier for the item
+        // In this example, assuming you have a method in Cart_Item to retrieve the document ID:
+        return currentItem.getDocumentId();
     }
 
     private void incrementQuantity (CartHolder holder, Cart_Item currentItem){
