@@ -9,6 +9,9 @@ public class Cart_Item {
 
     private int quantity;
 
+    // Add a field to store the document ID
+    private String documentId;
+
     // No-argument constructor
     public Cart_Item() {
         // Default constructor required for Firestore
@@ -69,5 +72,13 @@ public class Cart_Item {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public String getDocumentId() {
+        return documentId;
+    }
+
+    public void setDocumentId(String documentId) {
+        this.documentId = documentId;
     }
 }

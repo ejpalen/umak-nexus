@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Cart_Page extends AppCompatActivity {
+public class Cart_Page extends AppCompatActivity implements CartAdapter.OnItemRemoveListener {
 
     private RecyclerView cartRecyclerView;
     private List<Cart_Item> cartItems;
@@ -107,6 +107,7 @@ public class Cart_Page extends AppCompatActivity {
                         .addOnFailureListener(e ->
                                 Toast.makeText(getApplicationContext(), "Error adding order: " + e.getMessage(), Toast.LENGTH_SHORT).show());
 
+                clearCart();
                 startActivity(new Intent(getApplicationContext(), Order_Confirmation.class));
                 finish();
             } else {
@@ -119,9 +120,23 @@ public class Cart_Page extends AppCompatActivity {
     }
 
     private void clearCart() {
+        // Iterate through all items in the cart and remove them from Firestore
+        for (Cart_Item item : cartItems) {
+            cartAdapter.removeFromFirestore(item.getDocumentId());  // Use item directly
+        }
+
+        // Clear the local list and notify the adapter
         cartItems.clear();
         cartAdapter.notifyDataSetChanged();
     }
+
+
+    @Override
+    public void onItemRemove(Cart_Item item) {
+        // Handle item removal in Firestore or any other actions
+        cartAdapter.removeFromFirestore(item.getDocumentId());  // Use item directly
+    }
+
 
     private void getCartItems() {
         // Replace "cart" with your actual Firestore collection name
@@ -146,7 +161,11 @@ public class Cart_Page extends AppCompatActivity {
                         String productQtyString = String.valueOf(productQty);
 
                         if (productName != null && productPrice != null && productQty != null) {
-                            cartItems.add(new Cart_Item(productName, productPrice, productQtyString, R.drawable.delete_btn, imageUrl, productQty));
+                            // Set documentId for each Cart_Item
+                            Cart_Item cartItem = new Cart_Item(productName, productPrice, productQtyString, R.drawable.delete_btn, imageUrl, productQty);
+                            cartItem.setDocumentId(document.getId()); // Set documentId
+                            cartItems.add(cartItem);
+
                             Log.e("Firestore title: ", productName + productPrice + productQty + imageUrl);
                         } else {
                             Log.e("Firestore error: ", "Missing fields in document.");
@@ -155,5 +174,6 @@ public class Cart_Page extends AppCompatActivity {
                     cartAdapter.notifyDataSetChanged();
                 });
     }
+
 
 }
