@@ -9,6 +9,10 @@ import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,6 +26,7 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Transaction;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,42 +128,104 @@ public class Cart_Page extends AppCompatActivity implements CartAdapter.OnItemRe
         // Call the method to get cart items
         getCartItems();
 
-        confirm.setOnClickListener(view -> {
-            // Retrieve details from the first item in the cart (you might need to modify this logic based on your use case)
-            if (!cartItems.isEmpty()) {
-                Cart_Item firstCartItem = cartItems.get(0);
-                String product = firstCartItem.getProdName();
-                int quantity = Integer.parseInt(firstCartItem.getQty_item());
-                String price = firstCartItem.getProdPrice();
 
-                Map<String, Object> orderData = new HashMap<>();
-                orderData.put("product_name", product);
-                orderData.put("product_quantity", quantity);
-                orderData.put("product_subtotal", price);
+        confirm.setOnClickListener(view -> {
+            // Get the current user's name
+            String userName = getCurrentUserName();
+
+            // Get the current date
+            String purchaseDate = getCurrentDate();
+
+
+            // Create a list to hold all order items
+            List<Map<String, Object>> orderProducts = new ArrayList<>();
+
+            // Iterate over all items in the cart
+            for (Cart_Item cartItem : cartItems) {
+                String product = cartItem.getProdName();
+                int quantity = cartItem.getQuantity();
+                String price = cartItem.getProdPrice();
+
+                // Create a map for each order item
+                Map<String, Object> orderItemData = new HashMap<>();
+                orderItemData.put("product_name", product);
+                orderItemData.put("product_quantity", quantity);
+                orderItemData.put("product_subtotal", price);
                 // Add other fields as needed
 
-                Map<String, Object> orderProducts = new HashMap<>();
-                orderProducts.put("products", orderData);
-
-                db.collection("orders").add(orderProducts)
-                        .addOnSuccessListener(documentReference ->
-                                Toast.makeText(getApplicationContext(), "Checked out successfully!", Toast.LENGTH_SHORT).show())
-                        .addOnFailureListener(e ->
-                                Toast.makeText(getApplicationContext(), "Error adding order: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-
-                // Call the method to update the total price initially
-                cartAdapter.updateTotalPrice();
-
-                clearCart();
-                startActivity(new Intent(getApplicationContext(), Order_Confirmation.class));
-                finish();
-            } else {
-                Toast.makeText(getApplicationContext(), "Cart is empty!", Toast.LENGTH_SHORT).show();
+                // Add the order item to the list
+                orderProducts.add(orderItemData);
             }
+
+            // Create a map for the entire order document
+            Map<String, Object> orderDocument = new HashMap<>();
+            orderDocument.put("user_name", userName);
+            orderDocument.put("purchase_date", purchaseDate);
+            orderDocument.put("total_amount", cartAdapter.calculateTotalPrice()); // Add the total amount to the order
+            orderDocument.put("products", orderProducts);
+            // Add other fields as needed
+
+            // Add the order to the "orders" collection
+            db.collection("orders").add(orderDocument)
+                    .addOnSuccessListener(documentReference -> {
+                        Toast.makeText(getApplicationContext(), "Checked out successfully!", Toast.LENGTH_SHORT).show();
+
+                        clearCart();
+
+                        Intent intent = new Intent(getApplicationContext(), Order_Confirmation.class);
+
+                        // Pass the user's name, purchase date, and order ID to Order_Confirmation activity
+                        intent.putExtra("user_name", userName);
+                        intent.putExtra("purchase_date", purchaseDate);
+                        intent.putExtra("order_id", documentReference.getId()); // Use the generated order ID
+                        intent.putExtra("total_amount", cartAdapter.calculateTotalPrice());
+
+
+                        startActivity(intent);
+                        finish();
+                    })
+                    .addOnFailureListener(e ->
+                            Toast.makeText(getApplicationContext(), "Error adding order: " + e.getMessage(), Toast.LENGTH_SHORT).show());
         });
+
 
         // Set a click listener for the "Clear Cart" button
         clear.setOnClickListener(v -> clearCart());
+    }
+
+    private String getCurrentUserName() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        return auth.getCurrentUser() != null ? auth.getCurrentUser().getDisplayName() : "Unknown User";
+    }
+
+    private String getCurrentDate() {
+        // Use your preferred method/library to get the current date in the desired format
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
+        return dateFormat.format(new Date());
+    }
+
+    private void getAndIncrementOrderNumber(OnSuccessListener<Integer> successListener) {
+        // Get the latest order number from Firestore and increment it
+        DocumentReference orderNumberRef = db.collection("order_numbers").document("latest_order_number");
+
+        db.runTransaction((Transaction.Function<Void>) transaction -> {
+            DocumentSnapshot snapshot = transaction.get(orderNumberRef);
+
+            // Get the current order number
+            Integer currentOrderNumber = snapshot.getLong("order_number").intValue();
+
+            // Increment the order number
+            int newOrderNumber = currentOrderNumber + 1;
+
+            // Update the order number in Firestore for the next order
+            transaction.update(orderNumberRef, "order_number", newOrderNumber);
+
+            // Pass the updated order number to the success listener
+            successListener.onSuccess(newOrderNumber);
+
+            return null;
+        }).addOnFailureListener(e ->
+                Log.e("Firestore", "Error getting/incrementing order number", e));
     }
 
     private void clearCart() {
