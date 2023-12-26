@@ -5,5 +5,10 @@
     <string name="onboarding_signIn_header">SIGN IN WITH YOUR UMAK ACCOUNT</string>
     <string name="onboarding_signIn_description">Personalize your shopping experience with UMAK NEXUS by connecting to your Umak Account.</string>
     <string name="default_web_client_id">227913441721-nhhf9783vhjqni9pvbe1ghk88vr0m60g.apps.googleusercontent.com</string>
+    <string name="order_status_message">is being processed</string>
+    <string name="order_number_message">Order: %s</string>
+    <string name="total_amount_message">₱%s</string>
+
+
 </resources>
 
