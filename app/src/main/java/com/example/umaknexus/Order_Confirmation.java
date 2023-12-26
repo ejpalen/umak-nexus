@@ -58,11 +58,13 @@ public class Order_Confirmation extends AppCompatActivity {
                                 // Set the total amount directly
                                 totalAmountTextView.setText(getString(R.string.total_amount_message, String.format(Locale.getDefault(), "%.2f", totalAmount)));
                             } else {
-                                // Document does not exist
-                                // Handle the case when the document is not found
+                                // Handle errors
+                                orderStatusTextView.setText("Error fetching order");
+                                orderTitleTextView.setText("");
+                                nameTextView.setText("");
+                                dateTextView.setText("");
+                                totalAmountTextView.setText("");
                             }
-                        } else {
-                            // Handle errors
                         }
                     }
                 });
