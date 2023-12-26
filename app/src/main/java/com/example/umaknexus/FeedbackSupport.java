@@ -57,13 +57,12 @@ public class FeedbackSupport extends AppCompatActivity {
 
                 RatingBar ratingBar = findViewById(R.id.ratingBar);
                 EditText WriteReview = findViewById(R.id.WriteReview);
-
-                int RatingStar = ratingBar.getNumStars();
-                String userID = user.getUid();
+                float RatingStar = ratingBar.getRating();
+                String DisplayName = user.getDisplayName();
                 String Review = WriteReview.getText().toString();
 
                 Map<String, Object> feedbackData = new HashMap<>();
-                feedbackData.put("userID", userID);
+                feedbackData.put("DisplayName", DisplayName);
                 feedbackData.put("Review", Review);
                 feedbackData.put("ratingBar", RatingStar);
 
