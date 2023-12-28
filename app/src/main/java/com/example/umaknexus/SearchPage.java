@@ -59,20 +59,6 @@ public class SearchPage extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-//               if (newText.isEmpty()) {
-//                    // If the search query is empty, clear the displayed products or take any other action
-//                   clearDisplayedProducts();
-//                } else {
-//                    // If there's a search query, filter and display the relevant products
-//                    filterList(newText);
-//
-//                    // Check if this is the first time the user is typing
-//                 getproductsItems();
-//                }
-//               return false;
-//                filterList(newText);
-//                getproductsItems();
-//                return false;
                 if (newText.isEmpty()) {
                     // If the search query is empty, clear the displayed products or take any other action
                     clearDisplayedProducts();
@@ -104,35 +90,24 @@ public class SearchPage extends AppCompatActivity {
 
         shopProductrecyclerView = findViewById(R.id.shopProductRecyclerView);
 
-
+        //Initialize prouct items to Recyclerview
         productsItems = new ArrayList<>();
         productsAdapter = new shopProductsAdapter(getApplicationContext(), productsItems);
 
         GridLayoutManager shopProductLayoutManager = new GridLayoutManager(this, 2);
         shopProductrecyclerView.setLayoutManager(shopProductLayoutManager);
         shopProductrecyclerView.setAdapter(productsAdapter);
-
-
-
     }
 
    private void clearDisplayedProducts() {
-      // Clear the displayed products or take any other appropriate action
-       // For example, if you have a list of displayed products, you can clear the list and notify the adapter
-
-//       Log.d("SearchPage", "Clearing displayed products");
-//
-//       productsAdapter.notifyDataSetChanged();
-
+        // Clear the displayed products
        if (searchEditText.getQuery().toString().isEmpty()) {
-          // getproductsItems();
            productsItems.clear();
            productsAdapter.notifyDataSetChanged();
        }
-
-
     }
 
+    //Filter Items
     private void filterList(String text) {
         List<Products> filteredList = new ArrayList<>();
         for (Products products: productsItems ){
@@ -147,8 +122,6 @@ public class SearchPage extends AppCompatActivity {
             productsAdapter.setFilteredList(filteredList);
         }
     }
-
-
 
     private void getproductsItems() {
         database.collection("products")
@@ -179,42 +152,4 @@ public class SearchPage extends AppCompatActivity {
                     });
                 });
     }
-
-
-//    private void getproductsItems(String query) {
-//        if (query.isEmpty()) {
-//            // Handle empty search query if needed
-//            // You may clear the productsItems list or handle it differently
-//            Log.d("SearchPage", "Empty query");
-//            return;
-//        }
-//
-//        database.collection("products")
-//                .whereArrayContains("search_keywords", query.toLowerCase())
-//                .addSnapshotListener((value, error) -> {
-//                    if (error != null) {
-//                        Log.e("SearchPage", "Firestore error: " + error.getMessage());
-//                        return;
-//                    }
-//
-//                    productsItems.clear(); // Clear existing items
-//                    for (DocumentChange dc : value.getDocumentChanges()) {
-//                        if (dc.getType() == DocumentChange.Type.ADDED) {
-//                            String image = dc.getDocument().getString("Image");
-//                            String productName = dc.getDocument().getString("product_name");
-//                            String productPrice = dc.getDocument().getString("product_price");
-//                            String productID = dc.getDocument().getId();
-//
-//                            if (productName != null && productPrice != null) {
-//                                productsItems.add(new Products(productName, productPrice, image, productID));
-//                            } else {
-//                                Log.e("SearchPage", "One or more fields are null.");
-//                            }
-//                        }
-//                    }
-//                    Log.d("SearchPage", "Number of items found: " + productsItems.size());
-//                    productsAdapter.notifyDataSetChanged();
-//                });
-//    }
-
 }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -62,6 +63,7 @@ public class ProfilePage extends AppCompatActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
+        //Botton Navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_profile);
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -138,7 +140,7 @@ public class ProfilePage extends AppCompatActivity {
                         .addOnCompleteListener(ProfilePage.this, signOutTask -> {
                             Intent intent = new Intent(ProfilePage.this, Onboarding_Signin.class);
                             startActivity(intent);
-                            finish(); // Optional: Finish the current activity after logging out
+                            finish();
                         });
             }
         });
@@ -146,11 +148,11 @@ public class ProfilePage extends AppCompatActivity {
 
     }
 
+    //Set User Image
     private void setUserImage(String userId){
         // Reference to the "users" collection
         CollectionReference usersRef = db.collection("users");
 
-        // Query to get the document where the "id" field matches the user ID
         usersRef.whereEqualTo("id", userId)
                 .get()
                 .addOnCompleteListener(task -> {
@@ -159,8 +161,12 @@ public class ProfilePage extends AppCompatActivity {
                             // Retrieve the image URL from the document
                             String imageUrl = document.getString("profile");
 
-                            // Load the image into CircularImageView using Glide or another library
+                            if (imageUrl != null && !imageUrl.isEmpty() && !imageUrl.equals("")){
                             Glide.with(this).load(imageUrl).into(circularImageView);
+                            }
+                            else{
+                                Glide.with(this).load(user.getPhotoUrl().toString()).into(circularImageView);
+                            }
                         }
                     } else {
                         // Handle errors

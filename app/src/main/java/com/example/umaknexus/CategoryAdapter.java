@@ -41,8 +41,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
         holder.categoryTextView.setText(items.get(position).getName());
         Glide.with(context).load(items.get(position).getImage()).into(holder.categoryImageView);
 
-
-
         // Set background based on selection
         if (position == selectedPosition) {
             holder.categoryContainer.setBackgroundResource(R.drawable.category_bg_active);
@@ -67,7 +65,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder> {
                     context.startActivity(intent);
                 }
 
-                Toast.makeText(view.getContext(), "Category: " + items.get(position).getName(), Toast.LENGTH_SHORT).show();
             }
         });
     }

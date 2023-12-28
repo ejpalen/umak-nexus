@@ -1,7 +1,10 @@
 package com.example.umaknexus;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -30,10 +33,22 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull WishlistViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull WishlistViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.wishlistProduct.setText(items.get(position).getWishlistProduct());
         holder.wishlistPrice.setText(items.get(position).getWishlistPrice());
         Glide.with(context).load(items.get(position).getProductImage()).into(holder.productImage);
+
+        holder.productImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String productID = items.get(position).getProduct_ID();
+                Intent intent = new Intent(context, ProductPage.class);
+                intent.putExtra("productID", productID);
+                intent.putExtra("activity", "wishlist");
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

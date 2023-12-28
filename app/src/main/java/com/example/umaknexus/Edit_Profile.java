@@ -9,6 +9,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -54,25 +55,27 @@ public class Edit_Profile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editprofile);
 
-
+        // Initialize FirebaseAuth
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
         String userId = user.getUid();
 
+        //Layout Reference
         circularImageView = findViewById(R.id.profileImage);
         circularImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-        setUserImage(userId);
-
         String displayName = user.getDisplayName();
         String displayEmail = user.getEmail();
         TextView userName = findViewById(R.id.user_name_edit);
         userName.setText(displayName);
         TextView userEmail = findViewById(R.id.user_email);
         userEmail.setText(displayEmail);
-
         Button btnSave = findViewById(R.id.btn_save);
+        CircularImageView selectImage = findViewById(R.id.cameraImage);
+
+        setUserImage(userId);
+
+        //Button cannot be clicked initially unless user changed photo
         btnSave.setEnabled(false);
         if (!btnSave.isEnabled()) {
             btnSave.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#669AFF")));
@@ -85,8 +88,6 @@ public class Edit_Profile extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), ProfilePage.class));
             }
         });
-
-        CircularImageView selectImage = findViewById(R.id.cameraImage);
 
         selectImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,6 +104,8 @@ public class Edit_Profile extends AppCompatActivity {
             }
         });
     }
+
+    //Set user image
     private void setUserImage(String userId){
         // Reference to the "users" collection
         CollectionReference usersRef = db.collection("users");
@@ -116,8 +119,14 @@ public class Edit_Profile extends AppCompatActivity {
                             // Retrieve the image URL from the document
                             String imageUrl = document.getString("profile");
 
-                            // Load the image into CircularImageView using Glide or another library
-                            Glide.with(this).load(imageUrl).into(circularImageView);
+                            if (imageUrl != null && !imageUrl.isEmpty() && !imageUrl.equals("")){
+                                Glide.with(this).load(imageUrl).into(circularImageView);
+                                Log.e("Image exist!!", imageUrl);
+                            }
+                            else{
+                                Glide.with(this).load(user.getPhotoUrl().toString()).into(circularImageView);
+                                Log.e("Image does not exist!!", user.getPhotoUrl().toString());
+                            }
                         }
                     } else {
                         // Handle errors
@@ -126,6 +135,7 @@ public class Edit_Profile extends AppCompatActivity {
                 });
     }
 
+    //Handle uploading of image to Firebase Storage
     private void uploadImage() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setTitle("Saving Changes....");
@@ -158,9 +168,9 @@ public class Edit_Profile extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }
+
                         Toast.makeText(Edit_Profile.this, "Successfully Uploaded", Toast.LENGTH_SHORT).show();
 
-                        // Start the new activity after dismissing the ProgressDialog
                         startActivity(new Intent(getApplicationContext(), ProfilePage.class));
                         finish();
                     }
@@ -180,6 +190,7 @@ public class Edit_Profile extends AppCompatActivity {
     }
 
 
+    //Update profile image field in Firestore of current user
     private void updateProfileImage(String imageUrl) {
         // Update the "profile" field of the signed-in user with the image URL
         db.collection("users")
@@ -201,6 +212,7 @@ public class Edit_Profile extends AppCompatActivity {
     }
 
 
+    //Get selected image from Files Viewer
     private void selectImage() {
 
         Intent intent = new Intent();
@@ -217,13 +229,11 @@ public class Edit_Profile extends AppCompatActivity {
         if (requestCode == 100 && data != null && data.getData() != null) {
 
             imageUri = data.getData();
-//            binding.profileImage.setImageURI(imageUri);
             circularImageView.setImageURI(imageUri);
 
             Button btnSave = findViewById(R.id.btn_save);
             btnSave.setEnabled(true);
             if (btnSave.isEnabled()) {
-                // Set background tint color to "none" (null)
                 btnSave.setBackgroundTintList(null);
             }
 

@@ -116,11 +116,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
                                 // Assuming you have a Cart_Item class with appropriate fields
                                 Cart_Item cartItem = new Cart_Item(productName, productPrice, productQtyString, R.drawable.delete_btn, imageUrl, productQty);
 
-                                // Update UI or perform other actions with cartItem
-                                // For example, you might add it to a list or display it in a RecyclerView
-
-                                // Use the document ID as needed
-                                Log.d("Document ID", document.getId());
                             }
                         } else {
                             // Handle errors
@@ -131,14 +126,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
             // Handle the case where the current user is null
             Toast.makeText(context, "Current user is null", Toast.LENGTH_SHORT).show();
         }
+
     }
 
-    // Make these methods public
+    //Updated cart total price
     public void updateTotalPrice() {
         double total = calculateTotalPrice();
         totalAmountTextView.setText(String.format("₱ %.2f", total));
     }
 
+    //calculate cart total price
     public double calculateTotalPrice() {
         double total = 0;
         for (Cart_Item item : items) {
@@ -147,9 +144,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
         return total;
     }
 
+    //Remove cart item from firestore
     public void removeFromFirestore(String itemId) {
-        // Replace the comments with the actual logic to delete the document from Firestore
-        // Example assuming you have a "cart" collection:
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("cart").document(itemId)
                 .delete()
@@ -163,6 +159,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
                 });
     }
 
+    ////Remove cart item from cart
     private void removeItem(Cart_Item currentItem, int position) {
         // Remove the item from Firestore
         removeFromFirestore(currentItem.getDocumentId());
@@ -178,11 +175,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
     }
 
     public String getItemId(Cart_Item currentItem) {
-        // Replace the comments with the actual logic to get the unique identifier for the item
-        // In this example, assuming you have a method in Cart_Item to retrieve the document ID:
         return currentItem.getDocumentId();
     }
 
+    //Increment cart item quantity
     private void incrementQuantity(CartHolder holder, Cart_Item currentItem, int position) {
         int quantity = currentItem.getQuantity();
         currentItem.setQuantity(quantity);
@@ -192,6 +188,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
         onQuantityChangeListener.onIncrement(currentItem, position);
     }
 
+    //Decrement cart item quantity
     private void decrementQuantity(CartHolder holder, Cart_Item currentItem, int position) {
         int quantity = currentItem.getQuantity();
             currentItem.setQuantity(quantity);

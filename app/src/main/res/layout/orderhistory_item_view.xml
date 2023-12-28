@@ -61,36 +61,32 @@
             android:layout_marginTop="-2dp"
             android:background="@drawable/border_background"
             android:gravity="center"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:paddingTop="15dp"
-            android:paddingBottom="15dp"
+            android:paddingBottom="0dp"
             tools:ignore="MissingConstraints">
 
             <TextView
-                android:id="@+id/item_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.9"
+                android:fontFamily="@font/syne"
+                android:paddingLeft="15dp"
+                android:paddingBottom="5dp"
+                android:text="Products:"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/item_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/syne_bold"
                 android:gravity="left|center_vertical"
-                android:paddingLeft="15dp"
+                android:paddingHorizontal="15dp"
                 android:text="1X UNIFORM (XL)"
                 android:textColor="#000000"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/item_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_weight="0.1"
-                android:fontFamily="@font/syne"
-                android:paddingRight="15dp"
-                android:text="₱ 300.00"
-                android:textAlignment="textEnd"
-                android:textColor="@color/black" />
         </LinearLayout>
 
         <LinearLayout

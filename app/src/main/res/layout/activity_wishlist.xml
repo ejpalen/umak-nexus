@@ -79,6 +79,18 @@
             android:textColor="@color/main_color"
             android:textSize="32sp" />
 
+        <TextView
+            android:id="@+id/no_wishlist_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:fontFamily="@font/syne"
+            android:text="No Products Added To Wishlist"
+            android:textColor="@color/black"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/prodName" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/productWishList"
             android:layout_width="match_parent"

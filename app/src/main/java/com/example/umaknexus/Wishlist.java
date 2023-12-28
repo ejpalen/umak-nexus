@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
@@ -38,6 +39,7 @@ public class Wishlist extends AppCompatActivity {
     FrameLayout backBtn;
     List<WishlistItems> items;
     WishlistAdapter wishlistAdapter;
+    TextView noProductsWishlist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,17 +47,17 @@ public class Wishlist extends AppCompatActivity {
         setContentView(R.layout.activity_wishlist);
 
         productWishlist=findViewById(R.id.productWishList);
+        noProductsWishlist = findViewById(R.id.no_wishlist_tv);
         db = FirebaseFirestore.getInstance();
         wishlistRef = db.collection("wishlist");
-        
-//        getProductImage();
 
-//        // Initialize FirebaseAuth
-//        auth = FirebaseAuth.getInstance();
-//        user = auth.getCurrentUser();
-//
-//        String userId = user.getUid();
+        // Initialize FirebaseAuth
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
 
+        String userId = user.getUid();
+
+        //Retrieve items from wishlist collection
         wishlistRef.get().addOnSuccessListener(queryDocumentSnapshots -> {
             items = new ArrayList<>();
 
@@ -63,14 +65,27 @@ public class Wishlist extends AppCompatActivity {
                 String product_name = documentSnapshot.get("products.product_name").toString();
                 String product_subtotal = documentSnapshot.get("products.product_subtotal").toString();
                 String product_image = documentSnapshot.get("products.product_image").toString();
+                String product_userID = documentSnapshot.get("products.userID").toString();
+                String product_ID = documentSnapshot.get("products.productID").toString();
 
-                WishlistItems wishlistItem = new WishlistItems(product_name, product_subtotal, product_image);
-                items.add(wishlistItem);
+                if(product_userID.equals(userId)) {
+
+                    if (product_name != null && product_subtotal != null) {
+                        noProductsWishlist.setVisibility(View.GONE);
+                        WishlistItems wishlistItem = new WishlistItems(product_name, product_subtotal, product_image, product_ID);
+                        items.add(wishlistItem);
+                    } else {
+                        noProductsWishlist.setVisibility(View.VISIBLE);
+                    }
+                }
+
+
             }
 
             productWishlist.setAdapter(new WishlistAdapter(getApplicationContext(), items));
         });
 
+        //Bottom Navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_profile);
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -105,36 +120,4 @@ public class Wishlist extends AppCompatActivity {
             }
         });
     }
-
-//    private void getProductImage() {
-//        db.collection("wishlist")
-//
-//                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                    @SuppressLint("NotifyDataSetChanged")
-//                    @Override
-//                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-//                        if (error != null) {
-//                            Log.e("Firestore error: ", error.getMessage());
-//                            return; // Stop processing if there's an error
-//                        }
-//
-//                        for (DocumentChange dc : value.getDocumentChanges()) {
-//                            if (dc.getType() == DocumentChange.Type.ADDED) {
-//                                String image = dc.getDocument().getString("product_image" );
-//                                String name = dc.getDocument().getString("product_name");
-//                                String price = dc.getDocument().getString("product_price");
-//
-//                                if (name != null && price != null ) {
-//                                    items.add(new WishlistItems(name, price, image));
-//                                } else {
-//                                    Log.e("Firestore error: ", "One or more fields are null.");
-//                                }
-//                            }
-//                        }
-//                        // Notify the adapter after adding items
-//                        wishlistAdapter.notifyDataSetChanged();
-//
-//                    }
-//                });
-//    }
 }

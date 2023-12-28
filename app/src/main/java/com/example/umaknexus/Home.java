@@ -1,8 +1,12 @@
 package com.example.umaknexus;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +18,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,6 +34,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Home extends AppCompatActivity {
@@ -54,9 +60,12 @@ public class Home extends AppCompatActivity {
     public void onStart() {
         super.onStart();
 
+        //Initialize FirebaseAuth
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         FirebaseUser currentUser = auth.getCurrentUser();
+
+        getNotificationItems();
         if (currentUser == null) {
             Intent intent = new Intent(getApplicationContext(), Onboarding_Signin.class);
             startActivity(intent);
@@ -77,14 +86,21 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        //Intialize db
         database = FirebaseFirestore.getInstance();
 
-        isCurrentShop = false;
+        //Layout Reference
+        ViewAllProductsBtn = findViewById(R.id.ViewAllProducts_btn);
+        BestSellersViewAll_Btn = findViewById(R.id.BestSellersViewAllBtn);
+        NewArrivalsViewAll_Btn = findViewById(R.id.NewArrivalsViewAllBtn);
 
+        //Initialize Variables
+        isCurrentShop = false;
         page="Home";
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
 
+        //Bottom Navigation
         bottomNavigationView.setSelectedItemId(R.id.bottom_home);
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.bottom_home) {
@@ -123,6 +139,7 @@ public class Home extends AppCompatActivity {
 
         RecyclerView category_RecyclerView = findViewById(R.id.categoryRecyclerView);
 
+        //Add Category Items to Recyclerview
         categoryItems = new ArrayList<>();
         categoryAdapter = new CategoryAdapter(getApplicationContext(), categoryItems);
         categoryItems.add(new Categories("All", "https://firebasestorage.googleapis.com/v0/b/umak-nexus-53bf2.appspot.com/o/categoryImages%2Fall_icon.png?alt=media&token=079787e2-b46a-48e9-b9b7-0de4d33ddd0b", page));
@@ -135,6 +152,7 @@ public class Home extends AppCompatActivity {
         category_RecyclerView.setLayoutManager(layoutManager);
         category_RecyclerView.setAdapter(categoryAdapter);
 
+        //Add New Arrivals Product Items to Recyclerview
         productsItems = new ArrayList<>();
         productsAdapter = new NewArrivals_Products_Adapter(getApplicationContext(), productsItems);
 
@@ -143,7 +161,7 @@ public class Home extends AppCompatActivity {
         newArrivals_RecyclerView.setLayoutManager(NewArrivalslayoutManager);
         newArrivals_RecyclerView.setAdapter(productsAdapter);
 
-
+        //Add Bestsellers Product Items to Recyclerview
         bestSellersProductsItems = new ArrayList<>();
         bestSellersProductsAdapter = new Bestsellers_Products_Adapter(getApplicationContext(), bestSellersProductsItems);
 
@@ -155,17 +173,12 @@ public class Home extends AppCompatActivity {
         getBestSellersProductsItems("");
         getNewArrivalsProductsItems("");
 
-        ViewAllProductsBtn = findViewById(R.id.ViewAllProducts_btn);
-
         ViewAllProductsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), Shop_Products.class));
             }
         });
-
-        BestSellersViewAll_Btn = findViewById(R.id.BestSellersViewAllBtn);
-        NewArrivalsViewAll_Btn = findViewById(R.id.NewArrivalsViewAllBtn);
 
         BestSellersViewAll_Btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,6 +207,7 @@ public class Home extends AppCompatActivity {
         progressDialog.show();
     }
 
+    //Retrieve category data from Firestore
     private void getCategoryItems(){
         showProgressDialog();
         database.collection("categories")
@@ -221,6 +235,7 @@ public class Home extends AppCompatActivity {
                             }
                         }
                         progressDialog.dismiss();
+
                         // Notify the adapter after adding items
                         categoryAdapter.notifyDataSetChanged();
 
@@ -228,6 +243,7 @@ public class Home extends AppCompatActivity {
                 });
     }
 
+    //Retrieve New Arrivals data from Firestore
     public static void getNewArrivalsProductsItems(String categoryFilter) {
         CollectionReference productsCollection = database.collection("products");
 
@@ -260,6 +276,8 @@ public class Home extends AppCompatActivity {
         });
 
     }
+
+    //Retrieve Bestsellers data from Firestore
     public static void getBestSellersProductsItems(String categoryFilter) {
         CollectionReference productsCollection = database.collection("products");
 
@@ -288,7 +306,57 @@ public class Home extends AppCompatActivity {
                     }
                 }
             }
+
             bestSellersProductsAdapter.notifyDataSetChanged();
         });
+    }
+
+    //Retrieve Notifications data from Firestore
+    public void getNotificationItems() {
+        Query notificationsCollection = database.collection("notifications").whereIn("userID", Arrays.asList(user.getUid(), "admin")) ;
+
+
+        notificationsCollection.addSnapshotListener((value, error) -> {
+            if (error != null) {
+                Log.e("Firestore error: ", error.getMessage());
+                return;
+            }
+
+            for (DocumentChange dc : value.getDocumentChanges()) {
+                if (dc.getType() == DocumentChange.Type.ADDED) {
+                    String title = dc.getDocument().getString("title");
+                    String message = dc.getDocument().getString("message");
+
+                    if (title != null && message != null) {
+                        showNotification(title, message);
+                    } else {
+                        Log.e("Firestore error: ", "One or more fields are null.");
+                    }
+                }
+            }
+        });
+
+    }
+
+    //Set Notifications from Firestore
+    private void showNotification(String title, String description) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // Check if the Android version is Oreo or higher
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("your_channel_id", "Notifications", NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription("Channel Description");
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "your_channel_id")
+                .setSmallIcon(R.drawable.umak_nexus_logo)
+                .setContentTitle(title)
+                .setContentText(description)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true);
+
+        // Show the notification
+        notificationManager.notify(0, builder.build());
     }
 }

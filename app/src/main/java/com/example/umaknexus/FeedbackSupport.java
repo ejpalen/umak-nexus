@@ -51,6 +51,7 @@ public class FeedbackSupport extends AppCompatActivity {
             }
         });
 
+        //Feedback Submit Button is Clicked
         FeedbackSendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,6 +74,7 @@ public class FeedbackSupport extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Toast.makeText(getApplicationContext(), "Feedback Submitted.", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(), ProfilePage.class));
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

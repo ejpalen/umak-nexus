@@ -32,7 +32,6 @@ public class OrderHistory_Adapter extends RecyclerView.Adapter<OrderHistory_Hold
         holder.order_number.setText(currentItem.getOrder_number());
         holder.order_status.setText(currentItem.getOrder_status());
         holder.item_name.setText(currentItem.getItem_name());
-        holder.item_price.setText(currentItem.getItem_price());
         holder.total_price.setText(currentItem.getTotal_price());
     }
 

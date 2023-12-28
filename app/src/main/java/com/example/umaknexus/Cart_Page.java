@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -22,6 +24,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -32,29 +35,45 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class Cart_Page extends AppCompatActivity implements CartAdapter.OnItemRemoveListener {
 
     private RecyclerView cartRecyclerView;
     private List<Cart_Item> cartItems;
     private CartAdapter cartAdapter;
-
     private FirebaseFirestore db;
     private FirebaseAuth auth;
-
+    FirebaseUser user;
+    String userId;
+    int orderID =0;
+    TextView no_cart_productsTv;
+    ScrollView cartScrollView;
+    LinearLayout cartLinearLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart_page);
 
+        // Initialize Firebase
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        userId = user.getUid();
+
+        //Layout reference
+        no_cart_productsTv = findViewById(R.id.no_cart_products_tv);
+        cartScrollView = findViewById(R.id.cart_ScrollView);
+        cartLinearLayout = findViewById(R.id.cart_LinearLayout);
         Button confirm = findViewById(R.id.btn_confirm);
         Button clear = findViewById(R.id.clear);
         TextView totalAmountTextView = findViewById(R.id.amount);
 
-        // Initialize Firebase
-        db = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
+        //Generate random numbers for Order No.
+        Random random = new Random();
+        orderID = random.nextInt(10000) + 1;
 
+        //Navigation View
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_cart);
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -81,6 +100,7 @@ public class Cart_Page extends AppCompatActivity implements CartAdapter.OnItemRe
             return false;
         });
 
+        //Initialize Cart Items Recyclerview
         cartRecyclerView = findViewById(R.id.Cartrecyclerview);
         cartItems = new ArrayList<>();
         cartAdapter = new CartAdapter(this, cartItems, totalAmountTextView);
@@ -128,7 +148,7 @@ public class Cart_Page extends AppCompatActivity implements CartAdapter.OnItemRe
         // Call the method to get cart items
         getCartItems();
 
-
+        //Confirm button is clicked
         confirm.setOnClickListener(view -> {
             // Get the current user's name
             String userName = getCurrentUserName();
@@ -163,7 +183,9 @@ public class Cart_Page extends AppCompatActivity implements CartAdapter.OnItemRe
             orderDocument.put("purchase_date", purchaseDate);
             orderDocument.put("total_amount", cartAdapter.calculateTotalPrice()); // Add the total amount to the order
             orderDocument.put("products", orderProducts);
-            // Add other fields as needed
+            orderDocument.put("userID", userId);
+            orderDocument.put("orderID", orderID);
+            orderDocument.put("status", "Ongoing");
 
             // Add the order to the "orders" collection
             db.collection("orders").add(orderDocument)
@@ -179,7 +201,7 @@ public class Cart_Page extends AppCompatActivity implements CartAdapter.OnItemRe
                         intent.putExtra("purchase_date", purchaseDate);
                         intent.putExtra("order_id", documentReference.getId()); // Use the generated order ID
                         intent.putExtra("total_amount", cartAdapter.calculateTotalPrice());
-
+                        intent.putExtra("generated_order_id", String.valueOf(orderID)); // Use the generated order ID
 
                         startActivity(intent);
                         finish();
@@ -188,22 +210,23 @@ public class Cart_Page extends AppCompatActivity implements CartAdapter.OnItemRe
                             Toast.makeText(getApplicationContext(), "Error adding order: " + e.getMessage(), Toast.LENGTH_SHORT).show());
         });
 
-
         // Set a click listener for the "Clear Cart" button
         clear.setOnClickListener(v -> clearCart());
     }
 
+    //Retrieve the current user name for the order
     private String getCurrentUserName() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         return auth.getCurrentUser() != null ? auth.getCurrentUser().getDisplayName() : "Unknown User";
     }
 
+    //Retrieve the current date for the order
     private String getCurrentDate() {
-        // Use your preferred method/library to get the current date in the desired format
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.getDefault());
         return dateFormat.format(new Date());
     }
 
+    //Cart Product Quantity Increment and Decrement
     private void getAndIncrementOrderNumber(OnSuccessListener<Integer> successListener) {
         // Get the latest order number from Firestore and increment it
         DocumentReference orderNumberRef = db.collection("order_numbers").document("latest_order_number");
@@ -228,10 +251,11 @@ public class Cart_Page extends AppCompatActivity implements CartAdapter.OnItemRe
                 Log.e("Firestore", "Error getting/incrementing order number", e));
     }
 
+    //Clear cart items
     private void clearCart() {
         // Iterate through all items in the cart and remove them from Firestore
         for (Cart_Item item : cartItems) {
-            cartAdapter.removeFromFirestore(item.getDocumentId());  // Use item directly
+            cartAdapter.removeFromFirestore(item.getDocumentId());
         }
 
         // Clear the local list and notify the adapter
@@ -239,18 +263,19 @@ public class Cart_Page extends AppCompatActivity implements CartAdapter.OnItemRe
         cartAdapter.notifyDataSetChanged();
     }
 
-
+    //Remove cart item
     @Override
     public void onItemRemove(Cart_Item item) {
-        // Handle item removal in Firestore or any other actions
-        cartAdapter.removeFromFirestore(item.getDocumentId());  // Use item directly
+        cartAdapter.removeFromFirestore(item.getDocumentId());
     }
 
-
+//Retrieval of cart items from firestore
     private void getCartItems() {
-        // Replace "cart" with your actual Firestore collection name
         db.collection("cart")
                 .addSnapshotListener((value, error) -> {
+                    cartScrollView.setVisibility(View.INVISIBLE);
+                    cartLinearLayout.setVisibility(View.INVISIBLE);
+                    no_cart_productsTv.setVisibility(View.VISIBLE);
                     if (error != null) {
                         Log.e("Firestore error: ", error.getMessage());
                         return;
@@ -261,6 +286,7 @@ public class Cart_Page extends AppCompatActivity implements CartAdapter.OnItemRe
                         String imageUrl = document.getString("product_image");
                         String productName = document.getString("product_name");
                         String productPrice = document.getString("product_subtotal");
+                        String productUserID = document.getString("userID");
 
                         // Check if the "product_quantity" field exists before attempting to retrieve it
                         Integer productQty = document.getLong("product_quantity") != null
@@ -269,15 +295,26 @@ public class Cart_Page extends AppCompatActivity implements CartAdapter.OnItemRe
 
                         String productQtyString = String.valueOf(productQty);
 
-                        if (productName != null && productPrice != null && productQty != null) {
-                            // Set documentId for each Cart_Item
-                            Cart_Item cartItem = new Cart_Item(productName, productPrice, productQtyString, R.drawable.delete_btn, imageUrl, productQty);
-                            cartItem.setDocumentId(document.getId()); // Set documentId
-                            cartItems.add(cartItem);
+                        if (productUserID.equals(userId)) {
+                            if (productName != null && productPrice != null && productQty != null) {
+                                Cart_Item cartItem = new Cart_Item(productName, productPrice, productQtyString, R.drawable.delete_btn, imageUrl, productQty);
+                                cartItem.setDocumentId(document.getId());
+                                cartItems.add(cartItem);
 
-                            Log.e("Firestore title: ", productName + productPrice + productQty + imageUrl);
-                        } else {
-                            Log.e("Firestore error: ", "Missing fields in document.");
+                                //Update layout visibility
+                                cartScrollView.setVisibility(View.VISIBLE);
+                                cartLinearLayout.setVisibility(View.VISIBLE);
+                                no_cart_productsTv.setVisibility(View.INVISIBLE);
+
+                            } else {
+                                Log.e("Firestore error: ", "Missing fields in document.");
+
+                                //Update layout visibility
+                                cartScrollView.setVisibility(View.INVISIBLE);
+                                cartLinearLayout.setVisibility(View.INVISIBLE);
+                                no_cart_productsTv.setVisibility(View.VISIBLE);
+
+                            }
                         }
                     }
 
@@ -287,6 +324,7 @@ public class Cart_Page extends AppCompatActivity implements CartAdapter.OnItemRe
                 });
     }
 
+    //Updating cart product item in firestore
     private void updateQuantityInFirestore(Cart_Item item) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference cartItemRef = db.collection("cart").document(item.getDocumentId());
@@ -304,6 +342,7 @@ public class Cart_Page extends AppCompatActivity implements CartAdapter.OnItemRe
     }
 
 
+    //Updating cart total price
     private void updateTotalPrice() {
         cartAdapter.updateTotalPrice();
     }

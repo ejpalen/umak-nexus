@@ -48,19 +48,21 @@ public class Shop_Products extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop_products);
 
-        Home.isCurrentShop = true;
-
+        //Initialize db
         database = FirebaseFirestore.getInstance();
 
+        //Get intent
         Intent getFilterIntent = getIntent();
         categoryFilter = getFilterIntent.getStringExtra("filter");
         filterPosition = getFilterIntent.getIntExtra("selectedPosition", 0);
 
+        //Initialize variables
         page = "Shop";
+        Home.isCurrentShop = true;
 
+        //Bottom Navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setSelectedItemId(R.id.bottom_shop);
-
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.bottom_home) {
                 startActivity(new Intent(getApplicationContext(), Home.class));
@@ -85,10 +87,12 @@ public class Shop_Products extends AppCompatActivity {
             return false;
         });
 
+        //Layout Reference
         searchEditText = findViewById(R.id.searchRelativeLayout);
+
+        //Initialize category items to Recyclerview
         RecyclerView category_RecyclerView = findViewById(R.id.categoryRecyclerView);
         shopProductrecyclerView = findViewById(R.id.shopProductRecyclerView);
-
         categoryItems = new ArrayList<>();
         categoryAdapter = new CategoryAdapter(getApplicationContext(), categoryItems);
 
@@ -99,6 +103,7 @@ public class Shop_Products extends AppCompatActivity {
         category_RecyclerView.setLayoutManager(layoutManager);
         category_RecyclerView.setAdapter(categoryAdapter);
 
+        //Initialize product items to Recyclerview
         productsItems = new ArrayList<>();
         productsAdapter = new shopProductsAdapter(getApplicationContext(), productsItems);
 
@@ -144,7 +149,6 @@ public class Shop_Products extends AppCompatActivity {
     }
 
     public static void getproductsItems(String categoryFilter) {
-        Shop_Products shopProducts = new Shop_Products();
         CollectionReference productsCollection = database.collection("products");
 
         Query query;

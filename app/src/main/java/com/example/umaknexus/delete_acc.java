@@ -24,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 
 public class delete_acc extends AppCompatActivity {
@@ -31,7 +32,6 @@ public class delete_acc extends AppCompatActivity {
     FirebaseUser user;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth;
-    TextView error;
     GoogleSignInClient mGoogleSignInClient;
     int RC_SIGN_IN = 20;
     String email;
@@ -42,20 +42,24 @@ public class delete_acc extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete_acc);
 
-        Intent intent = getIntent();
-        email = intent.getStringExtra("email");
-
-        error = findViewById(R.id.textView4);
+        //layout reference
+        Button delete = findViewById(R.id.delete_btn);
 
         // Initialize FirebaseAuth
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
         mAuth = FirebaseAuth.getInstance();
 
+        //Get intent from settings activity
+        Intent intent = getIntent();
+        email = intent.getStringExtra("email");
+
+        //Progress dialog
         progressDialogLogin = new ProgressDialog(this);
         progressDialogLogin.setMessage("Loading...");
         progressDialogLogin.setCancelable(false);
 
+        //Google Sign in options
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail().build();
@@ -71,8 +75,6 @@ public class delete_acc extends AppCompatActivity {
             }
         });
 
-        Button delete = findViewById(R.id.delete_btn);
-
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,6 +83,7 @@ public class delete_acc extends AppCompatActivity {
         });
     }
 
+    //Confirmation dialog before deleting account
     private void showConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Confirmation")
@@ -95,6 +98,7 @@ public class delete_acc extends AppCompatActivity {
                 .show();
     }
 
+    //Delete current user from Firebase Authentication
     private void deleteCurrentUser() {
         FirebaseUser user = auth.getCurrentUser();
 
@@ -112,15 +116,17 @@ public class delete_acc extends AppCompatActivity {
                             deleteUserDataFromFirestore(user.getUid(), progressDialog);
                         } else {
                             Toast.makeText(delete_acc.this, "Failed to delete user: " + task.getException(), Toast.LENGTH_SHORT).show();
-                            error.setText(task.getException().toString());
+
                         }
                         progressDialog.dismiss();
                     });
         }
     }
 
+    //Delete Firestore data from collections
     private void deleteUserDataFromFirestore(String userId, ProgressDialog progressDialog) {
 
+        //Delete data from users collection
         db.collection("users")
                 .document(userId)
                 .delete()
@@ -129,10 +135,42 @@ public class delete_acc extends AppCompatActivity {
 
                     if (task.isSuccessful()) {
 
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        finish();
                     } else {
                         Toast.makeText(delete_acc.this, "Failed to delete user data: " + task.getException(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        //Delete data from whishlist collection
+        db.collection("wishlist")
+                .whereEqualTo("products.userID", userId)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        documentSnapshot.getReference().delete()
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                    } else {
+                                        Toast.makeText(delete_acc.this, "Failed to delete Wishlist: " + task.getException(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+                });
+
+        //Delete data from cart collection
+        db.collection("cart")
+                .whereEqualTo("userID", userId)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                        documentSnapshot.getReference().delete()
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                        finish();
+                                    } else {
+                                        Toast.makeText(delete_acc.this, "Failed to delete products from cart : " + task.getException(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                     }
                 });
     }
@@ -169,6 +207,7 @@ public class delete_acc extends AppCompatActivity {
         }
     }
 
+    //Sign in again to Google to Confirm, skip when user is recently signed in
     private void firbaseAuth(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         auth.signInWithCredential(credential)
