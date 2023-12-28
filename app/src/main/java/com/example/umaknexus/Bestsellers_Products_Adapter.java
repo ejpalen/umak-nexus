@@ -34,22 +34,19 @@ public class Bestsellers_Products_Adapter extends RecyclerView.Adapter<Bestselle
     @Override
     public void onBindViewHolder(@NonNull Bestsellers_Products_ViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.productsTextView.setText(items.get(position).getName());
-        // holder.productsImageView.setImageResource(items.get(position).getImage());
         Glide.with(context).load(items.get(position).getImage()).into(holder.productsImageView);
         holder.productsPriceTextView.setText(items.get(position).getPrice());
 
         holder.BestsellersProductLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Handle image click, start ProductPage activity with product code
-
+                //Proceed to product page when clicked
                 String productID = items.get(position).getproductID();
                 Intent intent = new Intent(context, ProductPage.class);
                 intent.putExtra("productID", productID);
                 intent.putExtra("activity", "shop_products");
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // Add this line
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
-//                Toast.makeText(view.getContext(), "PRODUCT ID: "  + productID, Toast.LENGTH_SHORT).show();
             }
         });
     }

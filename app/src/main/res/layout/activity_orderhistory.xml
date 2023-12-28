@@ -80,6 +80,16 @@
             android:textColor="@color/main_color"
             android:textSize="32sp" />
 
+        <TextView
+            android:id="@+id/no_orders_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:fontFamily="@font/syne"
+            android:text="No Orders Made Yet."
+            android:textColor="@color/black"
+            android:visibility="visible" />
+
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"

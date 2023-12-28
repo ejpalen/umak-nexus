@@ -71,18 +71,6 @@
                 android:textColor="@drawable/notification_text_color_selected" />
 
             <Button
-                android:id="@+id/feedbackRequestBtn"
-                android:layout_width="160dp"
-                android:layout_height="30dp"
-                android:layout_marginLeft="5dp"
-                android:layout_toEndOf="@+id/systemMaintenanceBtn"
-                android:background="@drawable/notification_filter_selector"
-                android:fontFamily="@font/syne"
-                android:text="Feedback Request"
-                android:textAllCaps="false"
-                android:textColor="@drawable/notification_text_color_selected" />
-
-            <Button
                 android:id="@+id/emergencyAlertBtn"
                 android:layout_width="150dp"
                 android:layout_height="30dp"

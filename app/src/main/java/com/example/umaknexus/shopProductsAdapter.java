@@ -41,25 +41,21 @@ public class shopProductsAdapter extends RecyclerView.Adapter<ProductsViewHolder
     @Override
     public void onBindViewHolder(@NonNull ProductsViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.productsTextView.setText(items.get(position).getName());
-       // holder.productsImageView.setImageResource(items.get(position).getImage());
         Glide.with(context).load(items.get(position).getImage()).into(holder.productsImageView);
         holder.productsPriceTextView.setText(items.get(position).getPrice());
 
+        //Animation
         holder.shopProductLinearLayout.startAnimation(AnimationUtils.loadAnimation(holder.itemView.getContext(), R.anim.anim_one));
-
 
         holder.shopProductLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Handle image click, start ProductPage activity with product code
-
                 String productID = items.get(position).getproductID();
                 Intent intent = new Intent(context, ProductPage.class);
                 intent.putExtra("productID", productID);
                 intent.putExtra("activity", "shop_products");
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // Add this line
                 context.startActivity(intent);
-//                Toast.makeText(view.getContext(), "PRODUCT ID: "  + productID, Toast.LENGTH_SHORT).show();
             }
         });
     }

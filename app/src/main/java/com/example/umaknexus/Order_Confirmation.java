@@ -23,6 +23,7 @@ public class Order_Confirmation extends AppCompatActivity {
 
         // Retrieve order ID from the intent
         String orderId = getIntent().getStringExtra("order_id");
+        String generatedOrderID = getIntent().getStringExtra("generated_order_id");
 
         // Update TextViews with the retrieved values
         TextView orderStatusTextView = findViewById(R.id.orderStatus);
@@ -51,18 +52,13 @@ public class Order_Confirmation extends AppCompatActivity {
 
                                 // Update TextViews with the retrieved values
                                 orderStatusTextView.setText(getString(R.string.order_status_message));
-                                orderTitleTextView.setText(getString(R.string.order_number_message, orderId));
+                                orderTitleTextView.setText(getString(R.string.order_number_message, generatedOrderID));
                                 nameTextView.setText(userName);
                                 dateTextView.setText(purchaseDate);
 
                                 // Set the total amount directly
                                 totalAmountTextView.setText(getString(R.string.total_amount_message, String.format(Locale.getDefault(), "%.2f", totalAmount)));
-                            } else {
-                                // Document does not exist
-                                // Handle the case when the document is not found
                             }
-                        } else {
-                            // Handle errors
                         }
                     }
                 });

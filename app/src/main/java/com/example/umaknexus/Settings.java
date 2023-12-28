@@ -27,6 +27,7 @@ public class Settings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        //Initialize Firebase
         auth = FirebaseAuth.getInstance();
         user = auth.getCurrentUser();
 
@@ -84,7 +85,7 @@ public class Settings extends AppCompatActivity {
                                     boolean pushNotificationsEnabled = (boolean) pushNotificationsValue;
                                     pushNotificationSwitch.setChecked(pushNotificationsEnabled);
                                 } else {
-                                    pushNotificationSwitch.setChecked(false); // Set a default value, for example
+                                    pushNotificationSwitch.setChecked(true); // Set a default value, for example
                                 }
                             }
                         }
@@ -108,7 +109,6 @@ public class Settings extends AppCompatActivity {
                     .update(updates)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            // Update successful
                         }
                     });
         }
