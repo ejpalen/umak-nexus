@@ -15,3 +15,7 @@ Collaborators:
 
 [RechelAnnG](https://github.com/RechelAnnG)
 
+Preview:
+
+![project-umak-nexus -image1](https://github.com/ejpalen/umak-nexus/assets/92970626/98106d5e-e190-42e6-9f58-5c2e7d83dd35)
+![project-umak-nexus -image2](https://github.com/ejpalen/umak-nexus/assets/92970626/2aaab9ca-d70c-4ae6-898f-2c94d8a53293)
